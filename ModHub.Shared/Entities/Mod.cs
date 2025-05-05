@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ModHub.Shared.Entities
+{
+    public class Mod
+    {
+
+        public int Id { get; set; }
+
+
+        [Display(Name = "Nombre Mod")] //Pone una Descripcion del campo
+        [Required] //Hace que sea obligatorio
+        [MaxLength(95, ErrorMessage = "Nombre Demasiado largo")]//Caracteres maximos y mensaje de error
+        public string FullName { get; set; }
+
+
+        [Display(Name = "Genero Mod")]
+        [Required]
+        [MaxLength(50, ErrorMessage = "Genero Demasiado largo")]
+        public string Email { get; set; }
+
+        [Display(Name = "Descripcion Mod")]
+        [Required]
+        [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
+        public string description { get; set; }
+        
+
+        [Display(Name = "FechaPublicacion Comentario")]
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime PublicationDate { get; set; }
+    }
+}
