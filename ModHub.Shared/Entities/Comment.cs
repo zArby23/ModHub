@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
 {
-    internal class Comment
+    public class Comment
     {
 
         public int Id { get; set; }

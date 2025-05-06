@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
 {
-    internal class Foro
+    public class Foro
     {
 
 
