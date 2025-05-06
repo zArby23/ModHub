@@ -34,5 +34,6 @@ namespace ModHub.Shared.Entities
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime PublicationDate { get; set; }
+
     }
 }
