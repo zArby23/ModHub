@@ -28,7 +28,7 @@ namespace ModHub.Shared.Entities
         [Required]
         [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
         public string Description { get; set; }
-        
+
         [Display(Name = "Version Mod")]
         [Required]
         public float Version { get; set; }
@@ -42,10 +42,6 @@ namespace ModHub.Shared.Entities
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateOnly UpdateDate { get; set; }
-
-        //Conexiones
-
-
 
     }
 }

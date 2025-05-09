@@ -14,6 +14,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<DataContext>(x=>x.UseSqlServer("name=DefaultConnection"));
+
 
 
 var app = builder.Build();

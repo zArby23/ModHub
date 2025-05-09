@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModHub.Shared.Entities;
-
 namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
 {
     
     public class DataContext : DbContext   
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) 
+        {
+        }
 
         public DbSet<User> Users { get; set; }
 

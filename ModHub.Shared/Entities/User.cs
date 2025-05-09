@@ -24,9 +24,15 @@ namespace ModHub.Shared.Entities
         [MaxLength(130, ErrorMessage = "Email Demasiado largo")]
         public string Email { get; set; }
 
-        [Display(Name = "FechaNacimiento Usuario")]
-        [Required]
-        public DateOnly birthdate { get; set; }
+        [Display(Name = "Contraseña Usuario")] //Pone una Descripcion del campo
+        [Required] //Hace que sea obligatorio
+        [MaxLength(75, ErrorMessage = "Contraseña Demasiado larga")]
+        public string Password { get; set; }
+
+        [Display(Name = "Fecha Registro Usuario")] //Pone una Descripcion del campo
+        [Required] //Hace que sea obligatorio
+        [MaxLength(75, ErrorMessage = "Contraseña Demasiado larga")]
+        public string DateRegistration { get; set; }
 
         [Display(Name = "Fecha Registro Usuario")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
