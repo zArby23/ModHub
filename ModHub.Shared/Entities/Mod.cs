@@ -27,13 +27,25 @@ namespace ModHub.Shared.Entities
         [Display(Name = "Descripcion Mod")]
         [Required]
         [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
-        public string description { get; set; }
-        
+        public string Description { get; set; }
 
-        [Display(Name = "FechaPublicacion Comentario")]
+        [Display(Name = "Version Mod")]
         [Required]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
-        public DateTime PublicationDate { get; set; }
+        public float Version { get; set; }
+
+        [Display(Name = "FechaPublicacion Mod")]
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateOnly PublicationDate { get; set; }
+
+        [Display(Name = "FechaActualizacion Mod")]
+        [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateOnly UpdateDate { get; set; }
+
+        //Conexiones
+
+
 
     }
 }
