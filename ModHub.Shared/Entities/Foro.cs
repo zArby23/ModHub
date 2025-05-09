@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
@@ -26,7 +27,12 @@ namespace ModHub.Shared.Entities
         public DateTime PublicationDate { get; set; }
 
         //Conexion
+        [JsonIgnore]
 
+        public Game Game { get; set; }
+
+
+        public int GameId { get; set; }
 
     }
 }

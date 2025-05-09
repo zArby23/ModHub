@@ -18,6 +18,10 @@ namespace ModHub.Shared.Entities
         [MaxLength(55, ErrorMessage = "Nombre Demasiado largo")]//Caracteres maximos y mensaje de error
         public string FullName { get; set; }
 
+        [Display(Name = "Descripcion Categoria")]
+        [Required]
+        [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
+        public string DescriptionCategory { get; set; }
 
 
 
