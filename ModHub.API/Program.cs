@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ModHub.API.Data;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,14 @@ builder.Services.AddControllers();
 
 //Inyecciones de dependencias
 
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "ModHub API",
+        Version = "v1"
+    });
+});
 builder.Services.AddDbContext<DataContext>(x=>x.UseSqlServer("name=DefaultConnection"));
 
 
@@ -22,15 +29,18 @@ var app = builder.Build();
 
 //Midlewares
 
-app.UseSwagger();
-app.UseSwaggerUI();
+
 
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModHub API v1");
+    });
 }
 
 app.UseHttpsRedirection();
