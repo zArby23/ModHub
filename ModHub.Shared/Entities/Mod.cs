@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModHub.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -42,6 +43,9 @@ namespace ModHub.Shared.Entities
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateOnly UpdateDate { get; set; }
+
+        [Display(Name = "Estado Mod")]
+        public ModStatus ModStatus { get; set; }
 
     }
 }

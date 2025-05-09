@@ -9,9 +9,7 @@ namespace ModHub.Shared.Entities
 {
     public class Game
     {
-
         public int Id { get; set; }
-
 
         [Display(Name = "Nombre Juego")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
@@ -22,10 +20,5 @@ namespace ModHub.Shared.Entities
         [Required]
         [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
         public string Description { get; set; }
-
-
-
-
-
     }
 }
