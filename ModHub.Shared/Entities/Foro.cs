@@ -25,9 +25,7 @@ namespace ModHub.Shared.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime PublicationDate { get; set; }
 
-        [Display(Name = "FechaPublicacion Respuesta")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
-        public DateTime DatePublicationResponse { get; set; }
+        //Conexion
 
 
     }
