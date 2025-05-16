@@ -6,9 +6,4 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ModHub.API\ModHub.API.csproj" />
-    <ProjectReference Include="..\ModHub.WEB\ModHub.WEB.csproj" />
-  </ItemGroup>
-
 </Project>

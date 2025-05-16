@@ -30,6 +30,16 @@ namespace ModHub.Shared.Entities
         [MaxLength(75, ErrorMessage = "Contraseña Demasiado larga")]
         public string DateRegistration { get; set; }
 
+        //Conexiones
+
+        ICollection<Report> Reports { get; set; }
+
+        ICollection<Mod> Mods { get; set; }
+
+        ICollection<User> Users { get; set; }
+
+        
+
 
 
     }

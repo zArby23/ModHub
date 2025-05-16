@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
@@ -35,8 +36,12 @@ namespace ModHub.Shared.Entities
         [MaxLength(75, ErrorMessage = "Contraseña Demasiado larga")]
         public string DateRegistration { get; set; }
 
+        [JsonIgnore]
+        public Creator Creator { get; set; }
 
+        public int CreatorID { get; set; }
 
+        //Falta la conexion del admin
 
     }
 }
