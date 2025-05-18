@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
@@ -46,6 +48,25 @@ namespace ModHub.Shared.Entities
 
         [Display(Name = "Estado Mod")]
         public ModStatus ModStatus { get; set; }
+        //Conexiones
+        [JsonIgnore]
+
+        public Report Report { get; set; }
+
+        public int ReportId { get; set; }
+
+        [JsonIgnore]
+
+        public Creator Creator { get; set; }
+
+        public int CreatorId { get; set; }
+
+        [JsonIgnore]
+
+        public Game Game { get; set; }
+
+
+        public int GameId { get; set; }
 
     }
 }

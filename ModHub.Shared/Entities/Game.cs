@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
 {
     public class Game
     {
+
         public int Id { get; set; }
+
 
         [Display(Name = "Nombre Juego")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
@@ -20,5 +23,20 @@ namespace ModHub.Shared.Entities
         [Required]
         [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
         public string Description { get; set; }
+
+
+        [JsonIgnore]
+        ICollection<Category> Categories { get; set; }
+
+        [JsonIgnore]
+        ICollection<Foro> foros { get; set; }
+
+        [JsonIgnore]
+        ICollection<Mod> Mods { get; set; }
+
+
+
+
+
     }
 }

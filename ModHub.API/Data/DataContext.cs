@@ -19,6 +19,10 @@ namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
 
         public DbSet<Category> Categorys { get; set; }
 
+        public DbSet<Creator> Creators { get; set; }
+
+        public DbSet<Report> Reports { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
