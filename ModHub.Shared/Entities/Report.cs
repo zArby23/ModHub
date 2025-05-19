@@ -11,22 +11,22 @@ namespace ModHub.Shared.Entities
     public class Report
     {
         public int Id { get; set; }
+        [Display(Name = "Titulo")]
+        [Required]
+        [MaxLength(40, ErrorMessage = "Tamaño maximo permitido")]
+        public string Title { get; set; }
 
-
-        [Display(Name = "Contenido  Reporte")] //Pone una Descripcion del campo
-        [Required] //Hace que sea obligatorio
-        [MaxLength(1200, ErrorMessage = "Tamaño maximo permitido")]//Caracteres maximos y mensaje de error
+        [Display(Name = "Contenido  Reporte")]
+        [Required]
+        [MaxLength(1200, ErrorMessage = "Tamaño maximo permitido")]
         public string Content { get; set; }
 
-
-
-
-        //conexiones
         [JsonIgnore]
+        public Mod Mod { get; set; }
+        public int ModId { get; set; }
 
+        [JsonIgnore]
         public Creator Creator { get; set; }
-
         public int CreatorId { get; set; }
-
     }
 }

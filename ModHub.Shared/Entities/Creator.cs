@@ -9,26 +9,22 @@ namespace ModHub.Shared.Entities
 {
     public class Creator
     {
-
         public int Id { get; set; }
 
-
-        [Display(Name = "Nombre Creator")] //Pone una Descripcion del campo
+        [Display(Name = "Nombre de usuario")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
         [MaxLength(75, ErrorMessage = "Nombre Demasiado largo")]//Caracteres maximos y mensaje de error
         public string FullName { get; set; }
 
-
-        [Display(Name = "Email Creator")]
+        [Display(Name = "Correo electrónico")]
         [Required]
         [EmailAddress(ErrorMessage = "Correo electrónico no valido")]
         [MaxLength(130, ErrorMessage = "Email Demasiado largo")]
         public string Email { get; set; }
 
-        [Display(Name = "Fecha Registro Creator")] //Pone una Descripcion del campo
-        [Required] //Hace que sea obligatorio
-        [MaxLength(75, ErrorMessage = "Contraseña Demasiado larga")]
-        public string DateRegistration { get; set; }
+        [Display(Name = "Fecha de Registro")] //Pone una Descripcion del campo
+        [DataType(DataType.Date)]
+        public DateTime DateRegistration = DateTime.Now; //Fecha de registro por defecto es la fecha actual
 
         //Conexiones
 

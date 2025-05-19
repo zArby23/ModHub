@@ -10,28 +10,20 @@ namespace ModHub.Shared.Entities
 {
     public class Category
     {
-
         public int Id { get; set; }
-
 
         [Display(Name = "Nombre Categoria")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
         [MaxLength(55, ErrorMessage = "Nombre Demasiado largo")]//Caracteres maximos y mensaje de error
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Descripcion Categoria")]
         [Required]
         [MaxLength(800, ErrorMessage = "Tamaño maximo permitido")]
-        public string DescriptionCategory { get; set; }
-
-
+        public string Description { get; set; }
 
         //Conexiones
         [JsonIgnore]
-
-        ICollection<Game> Games { get; set; }
-
-
-
+        ICollection<GameCategory> GamesCategories { get; set; }
     }
 }

@@ -10,29 +10,25 @@ namespace ModHub.Shared.Entities
 {
     public class Foro
     {
-
-
         public int Id { get; set; }
 
+        [Display(Name = "Título del Foro")] //Pone una Descripcion del campo
+        [Required] //Hace que sea obligatorio
+        [MaxLength(40, ErrorMessage = "Tamaño maximo permitido")]//Caracteres maximos y mensaje de error
+        public string Title { get; set; }
 
-        [Display(Name = "Contenido  Comentario")] //Pone una Descripcion del campo
+        [Display(Name = "Contenido del Foro")] //Pone una Descripcion del campo
         [Required] //Hace que sea obligatorio
         [MaxLength(1200, ErrorMessage = "Tamaño maximo permitido")]//Caracteres maximos y mensaje de error
-        public string content { get; set; }
+        public string Content { get; set; }
 
-
-        [Display(Name = "FechaPublicacion Comentario")]
-        [Required]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
-        public DateTime PublicationDate { get; set; }
+        [Display(Name = "Fecha de publicacion comentario")]
+        [DataType(DataType.Date)]
+        public DateTime PublicationDate = DateTime.Now; //Fecha de registro por defecto es la fecha actual
 
         //Conexion
         [JsonIgnore]
-
         public Game Game { get; set; }
-
-
         public int GameId { get; set; }
-
     }
 }
