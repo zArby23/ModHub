@@ -35,19 +35,19 @@ namespace ModHub.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GameCategories([FromBody] GameCategory gamecategory)
+        public async Task<IActionResult> GameCategories([FromBody] GameCategory gameCategory)
         {
-            _Context.GamesCategories.Add(gamecategory);
+            _Context.GamesCategories.Add(gameCategory);
             await _Context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = gamecategory.Id }, gamecategory);
+            return CreatedAtAction(nameof(Get), new { id = gameCategory.Id }, gameCategory);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(GameCategory gamecategory)
+        public async Task<IActionResult> Put(GameCategory gameCategory)
         {
-            _Context.GamesCategories.Update(gamecategory);
+            _Context.GamesCategories.Update(gameCategory);
             await _Context.SaveChangesAsync();
-            return Ok(gamecategory);
+            return Ok(gameCategory);
         }
 
         [HttpDelete("{id}")]

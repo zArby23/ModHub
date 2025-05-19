@@ -35,19 +35,19 @@ namespace ModHub.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Forums forums)
+        public async Task<IActionResult> Post([FromBody] Forum forum)
         {
-            _Context.Foros.Add(forums);
+            _Context.Forums.Add(forum);
             await _Context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = forums.Id }, forums);
+            return CreatedAtAction(nameof(Get), new { id = forum.Id }, forum);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Forums forums)
+        public async Task<IActionResult> Put(Forum forum)
         {
-            _Context.Foros.Update(forums);
+            _Context.Forums.Update(forum);
             await _Context.SaveChangesAsync();
-            return Ok(forums);
+            return Ok(forum);
         }
 
         [HttpDelete("{id}")]
