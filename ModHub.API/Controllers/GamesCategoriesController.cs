@@ -5,13 +5,13 @@ using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
-    [Route("api/reports")]
+    [Route("api/gamescategories")]
     [ApiController]
-    public class ReportsController : ControllerBase
+    public class GamesCategoriesController : ControllerBase
     {
         private readonly DataContext _Context;
 
-        public ReportsController(DataContext context)
+        public GamesCategoriesController(DataContext context)
         {
             _Context = context;
         }
@@ -19,41 +19,41 @@ namespace ModHub.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var report = await _Context.Reports.ToListAsync();
-            return Ok(report);
+            var gamecategory = await _Context.GamesCategories.ToListAsync();
+            return Ok(gamecategory);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var post = await _Context.Reports.FirstOrDefaultAsync(x => x.Id == id);
-            if (post == null)
+            var category = await _Context.GamesCategories.FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return Ok(post);
+            return Ok(category);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Report([FromBody] Report report)
+        public async Task<IActionResult> GameCategories([FromBody] GameCategory gamecategory)
         {
-            _Context.Reports.Add(report);
+            _Context.GamesCategories.Add(gamecategory);
             await _Context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = report.Id }, report);
+            return CreatedAtAction(nameof(Get), new { id = gamecategory.Id }, gamecategory);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Report report)
+        public async Task<IActionResult> Put(GameCategory gamecategory)
         {
-            _Context.Reports.Update(report);
+            _Context.GamesCategories.Update(gamecategory);
             await _Context.SaveChangesAsync();
-            return Ok(report);
+            return Ok(gamecategory);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var FilasAfectadas = await _Context.Reports
+            var FilasAfectadas = await _Context.GamesCategories
                     .Where(x => x.Id == id)
                     .ExecuteDeleteAsync();
             if (FilasAfectadas == 0)

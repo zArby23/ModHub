@@ -8,6 +8,7 @@ namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
         public DataContext(DbContextOptions<DataContext> options) : base(options) 
         {
         }
+        public DbSet<GameCategory> GamesCategories { get; set; }
 
         public DbSet<User> Users { get; set; }
 
@@ -17,7 +18,7 @@ namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
 
         public DbSet<Foro> Foros { get; set; }
 
-        public DbSet<Category> Categorys { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<Creator> Creators { get; set; }
 
