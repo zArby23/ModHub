@@ -53,6 +53,11 @@ namespace ModHub.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var mod = await _Context.Mods.FirstOrDefaultAsync(x => x.Id == id);
+            var reports = _Context.Reports.Where(r => r.ModId == id);
+            _Context.Reports.RemoveRange(reports);
+            await _Context.SaveChangesAsync();
+
             var FilasAfectadas = await _Context.Mods
                     .Where(x => x.Id == id)
                     .ExecuteDeleteAsync();
