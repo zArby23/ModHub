@@ -16,7 +16,7 @@ namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
 
         public DbSet<Game> Games { get; set; }
 
-        public DbSet<Foro> Foros { get; set; }
+        public DbSet<Forum> Forums { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
