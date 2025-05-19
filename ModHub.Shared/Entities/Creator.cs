@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
@@ -28,11 +29,14 @@ namespace ModHub.Shared.Entities
 
         //Conexiones
 
-        ICollection<Report> Reports { get; set; }
+        [JsonIgnore]
+        public ICollection<Report> Reports { get; set; }
 
-        ICollection<Mod> Mods { get; set; }
+        [JsonIgnore]
+        public ICollection<Mod> Mods { get; set; }
 
-        ICollection<User> Users { get; set; }
+        [JsonIgnore]
+        public ICollection<User> Users { get; set; }
 
         
 
