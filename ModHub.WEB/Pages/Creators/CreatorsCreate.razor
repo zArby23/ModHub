@@ -1,0 +1,39 @@
+﻿@page "/creators/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Agregar Creador</h1>
+
+<CreatorsForm @ref="creatorForm" Creator="creator" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private Creator creator = new();
+    private CreatorsForm creatorForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/creators", creator);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            creatorForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/creators");
+        }
+        navigationManager.NavigateTo("/creators");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/creators");
+    }
+}
