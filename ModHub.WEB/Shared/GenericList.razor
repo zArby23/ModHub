@@ -5,7 +5,7 @@
     @if (Loading is null)
     {
         <div class="align-items-center">
-            <img src="images/cargando.gif" />
+            <img src="./images/cargando.gif" />
         </div>
     }
     else
@@ -18,6 +18,7 @@ else if (MyList.Count == 0)
     @if (NoRecords is null)
     {
         <p>No hay registros para mostrar...</p>
+        <a class="btn btn-outline-primary float-end" href="@CreateUrl"><i class="bi bi-plus-circle-fill"></i> Añadir</a>
     }
     else
     {
@@ -44,5 +45,6 @@ else
     [EditorRequired]
     public List<Titem> MyList { get; set; } = null!;
 
-
+    [Parameter]
+    public string CreateUrl { get; set; } = "";
 }

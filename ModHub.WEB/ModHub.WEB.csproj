@@ -16,4 +16,9 @@
 		<ProjectReference Include="..\ModHub.Shared\ModHub.Shared.csproj" />    
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Pages\Mods\" />
+	  <Folder Include="Pages\Games\" />
+	</ItemGroup>
+
 </Project>

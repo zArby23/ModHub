@@ -52,15 +52,17 @@ namespace ModHub.Shared.Entities
         //Conexiones
 
         [JsonIgnore]
-        ICollection<Report> Reports { get; set; }
+        public ICollection<Report> Reports { get; set; }
 
         [JsonIgnore]
         public Creator Creator { get; set; }
-        public int CreatorId { get; set; }
+        public int? CreatorId { get; set; }
+
+        [MaxLength(75)]
+        public string CreatorName { get; set; }
 
         [JsonIgnore]
         public Game Game { get; set; }
         public int GameId { get; set; }
-
     }
 }
