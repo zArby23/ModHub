@@ -29,7 +29,7 @@ namespace ModHub.Shared.Entities
         ICollection<GameCategory> GamesCategories { get; set; }
 
         [JsonIgnore]
-        ICollection<Foro> Foros { get; set; }
+        ICollection<Forum> Forums{ get; set; }
 
         [JsonIgnore]
         ICollection<Mod> Mods { get; set; }

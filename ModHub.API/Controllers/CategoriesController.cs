@@ -5,13 +5,13 @@ using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
-    [Route("api/mods")]
+    [Route("api/categories")]
     [ApiController]
-    public class ModsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly DataContext _Context;
 
-        public ModsController(DataContext context)
+        public CategoriesController(DataContext context)
         {
             _Context = context;
         }
@@ -19,46 +19,41 @@ namespace ModHub.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var mods = await _Context.Mods.ToListAsync();
-            return Ok(mods);
+            var categories = await _Context.Categories.ToListAsync();
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var mod = await _Context.Mods.FirstOrDefaultAsync(x=> x.Id == id);
-            if (mod == null)
+            var categories = await _Context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if (categories == null)
             {
                 return NotFound();
             }
-            return Ok(mod);
+            return Ok(categories);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Mod mod)
+        public async Task<IActionResult> Post([FromBody] Category category)
         {
-            _Context.Mods.Add(mod);
+            _Context.Categories.Add(category);
             await _Context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = mod.Id }, mod);
+            return CreatedAtAction(nameof(Get), new { id = category.Id }, category);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Mod mod)
+        public async Task<IActionResult> Put(Category category)
         {
-            _Context.Mods.Update(mod);
+            _Context.Categories.Update(category);
             await _Context.SaveChangesAsync();
-            return Ok(mod);
+            return Ok(category);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var mod = await _Context.Mods.FirstOrDefaultAsync(x => x.Id == id);
-            var reports = _Context.Reports.Where(r => r.ModId == id);
-            _Context.Reports.RemoveRange(reports);
-            await _Context.SaveChangesAsync();
-
-            var FilasAfectadas = await _Context.Mods
+            var FilasAfectadas = await _Context.Categories
                     .Where(x => x.Id == id)
                     .ExecuteDeleteAsync();
             if (FilasAfectadas == 0)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModHub.Shared.Entities
 {
-    public class Foro
+    public class Forum
     {
         public int Id { get; set; }
 
