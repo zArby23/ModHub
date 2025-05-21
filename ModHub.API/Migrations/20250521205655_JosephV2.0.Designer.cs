@@ -12,15 +12,15 @@ using ModHub.API.Data;
 namespace ModHub.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250519224026_Initial")]
-    partial class Initial
+    [Migration("20250521205655_JosephV2.0")]
+    partial class JosephV20
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -153,8 +153,12 @@ namespace ModHub.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CreatorName")
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -205,14 +209,14 @@ namespace ModHub.API.Migrations
                         .HasMaxLength(1200)
                         .HasColumnType("nvarchar(1200)");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatorName")
                         .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
-                    b.Property<int>("ModId")
+                    b.Property<int?>("ModId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModName")
@@ -312,8 +316,7 @@ namespace ModHub.API.Migrations
                     b.HasOne("ModHub.Shared.Entities.Creator", "Creator")
                         .WithMany("Mods")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ModHub.Shared.Entities.Game", "Game")
                         .WithMany()
@@ -331,14 +334,12 @@ namespace ModHub.API.Migrations
                     b.HasOne("ModHub.Shared.Entities.Creator", "Creator")
                         .WithMany("Reports")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ModHub.Shared.Entities.Mod", "Mod")
                         .WithMany("Reports")
                         .HasForeignKey("ModId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Creator");
 
