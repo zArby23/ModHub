@@ -1,0 +1,73 @@
+﻿﻿﻿@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@page "/mods/edit/{Id:int}"
+
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService swal
+
+
+<h3>ModsEdit</h3>
+
+@if (mod is null)
+{
+    <div class="spinner" />
+    <p>Cargando...</p>
+}
+else
+{
+    <ModsForm @ref="modForm" Mod="mod" OnValidSubmit="Edit" ReturnAction="Return" />
+}
+
+@code {
+    private Mod mod;
+    private ModsForm modForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.GetAsync<Mod>($"/api/mods/{Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/mods");
+                return;
+            }
+            else
+            {
+                var message = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+        }
+        else
+        {
+            mod = responseHttp.Response;
+        }
+
+    }
+
+    private async Task Edit()
+    {
+        var responseHttp = await repository.PutAsync($"/api/mods", mod);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+        }
+        else
+        {
+            modForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/mods");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/mods");
+    }
+}

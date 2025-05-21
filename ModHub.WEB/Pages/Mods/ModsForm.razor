@@ -1,0 +1,119 @@
+﻿﻿@using ModHub.Shared.Entities
+﻿@using ModHub.Shared.Enums
+
+@inject NavigationManager Navigation
+@inject SweetAlertService swal
+<h3>ModsForm</h3>
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <div class="mb-3">
+            <label>Nombre</label>
+            <div>
+                <InputText width="10" @bind-Value="@mod.Name" />
+                <ValidationMessage For="@(() => mod.Name)" />
+            </div>
+            <label>Genero</label>
+            <div>
+                <InputText width="10" @bind-Value="@mod.Genre" />
+                <ValidationMessage For="@(() => mod.Genre)" />
+            </div>
+            <label>Descripcion</label>
+            <div>
+                <InputText width="10" @bind-Value="@mod.Description" />
+                <ValidationMessage For="@(() => mod.Description)" />
+            </div>
+            <label>Version</label>
+            <div>
+                <InputNumber width="10" @bind-Value="@mod.Version" />
+                <ValidationMessage For="@(() => mod.Version)" />
+            </div>
+            <label>Fecha de Publicacion</label>
+            <div>
+                <InputDate width="10" @bind-Value="@mod.PublicationDate" />
+                <ValidationMessage For="@(() => mod.PublicationDate)" />
+            </div>
+            <label>Fecha de Actualizacion</label>
+            <div>
+                <InputDate width="10" @bind-Value="@mod.UpdateDate" />
+                <ValidationMessage For="@(() => mod.UpdateDate)" />
+            </div>
+            <label>Estatus</label>
+            <div>
+                <InputSelect @bind-Value="@mod.ModStatus">
+                    @foreach (ModStatus status in Enum.GetValues(typeof(ModStatus)))
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => mod.ModStatus)" />
+            </div>
+            <button class="btn btn-primary" type="submit">Guardar</button>
+            <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
+        </div>
+    </div>
+</EditForm>
+
+
+@code 
+{
+
+    private EditContext editContext = null!;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(mod);
+    }
+
+    [EditorRequired]
+    [Parameter]
+    public Mod mod { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+    public bool FormPostedSuccessfully { get; set; } = false;
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var formWasEdited = editContext.IsModified();
+
+        if (!formWasEdited)
+        {
+            return;
+        }
+
+        if (FormPostedSuccessfully)
+        {
+            return;
+        }
+
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "¿Deseas abandonar la página y perder los cambios?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true
+            });
+
+        var confirm = !string.IsNullOrEmpty(result.Value);
+
+        if (confirm)
+        {
+            return;
+        }
+
+        context.PreventNavigation();
+    }
+
+}
+
+}
