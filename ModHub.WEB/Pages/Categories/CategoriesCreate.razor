@@ -1,0 +1,39 @@
+﻿@page "/categories/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Agregar Categoria</h1>
+
+<CategoriesForm @ref="categoryForm" Category="category" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private Category category = new();
+    private CategoriesForm categoryForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/categories", category);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            categoryForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/categories");
+        }
+        navigationManager.NavigateTo("/categories");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/categories");
+    }
+}
