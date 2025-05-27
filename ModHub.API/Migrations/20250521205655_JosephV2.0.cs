@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ModHub.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class JosephV20 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -136,7 +136,8 @@ namespace ModHub.API.Migrations
                     Version = table.Column<float>(type: "real", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModStatus = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
+                    CreatorId = table.Column<int>(type: "int", nullable: true),
+                    CreatorName = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     GameId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -147,7 +148,7 @@ namespace ModHub.API.Migrations
                         column: x => x.CreatorId,
                         principalTable: "Creators",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Mods_Games_GameId",
                         column: x => x.GameId,
@@ -164,8 +165,8 @@ namespace ModHub.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(1200)", maxLength: 1200, nullable: false),
-                    ModId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
+                    ModId = table.Column<int>(type: "int", nullable: true),
+                    CreatorId = table.Column<int>(type: "int", nullable: true),
                     CreatorName = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     ModName = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true)
                 },

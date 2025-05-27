@@ -1,0 +1,184 @@
+﻿@page "/mods"
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.WEB.Repositories
+@using ModHub.WEB.Shared
+
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+
+<h3>Mods</h3>
+
+
+@if (Mods is null)
+{
+    <div class="spinner" />
+}
+else
+{
+    <GenericList MyList="Mods">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="oi oi-globe"></i> Guías
+                        <a class="btn btn-sm btn-primary float-end" href="/guias/create"><i class="oi oi-plus"></i>Crear guia</a>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        Genero
+                                    </th>
+                                    <th>
+                                        Descripcion
+                                    </th>
+                                    <th>
+                                        Version
+                                    </th>
+                                    <th>
+                                        FechaPublicacion
+                                    </th>
+                                    <th>
+                                        FechaActualizacion
+                                    </th>
+                                    <th>
+                                        Estado
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var mod in Mods!)
+                                {
+                                     <tr>
+                                        <td>
+                                            @mod.Name
+                                        </td>
+                                        <td>
+                                            @mod.Genre
+                                        </td>
+                                        <td>
+                                            @mod.Description
+                                        </td>
+                                        <td>
+                                            @mod.Version
+                                        </td>
+                                        <td>
+                                            @mod.PublicationDate
+                                        </td>
+                                        <td>
+                                            @mod.UpdateDate
+                                        </td>
+                                        <td>
+                                            @mod.ModStatus
+                                        </td>
+                                        <td>
+                                            @GetCreatorName(mod.CreatorId)
+                                        </td>
+                                        <td>
+                                            @GetGamesName(mod.GameId)
+                                        </td>
+                                        <td>
+                                            <a href="/mods/edit/@mod.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+                                            <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(mod))><i class="oi oi-trash" /> Borrar</button>   
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </Body>
+    </GenericList>
+
+}
+
+@code 
+{
+    public List<Mod> Mods { get; set; }
+
+    public List<Creator> Creators { get; set; }
+
+    public List<Game> Games { get; set; }
+
+
+    private string GetCreatorName(int? creatorId)
+    {
+        var creator = Creators.FirstOrDefault(r => r.Id == creatorId);
+        return creator != null ? $"{creator.FullName}" : "N/A";
+    }
+
+    private string GetGamesName(int gameID)
+    {
+        var game = Games.FirstOrDefault(g => g.Id == gameID);
+        return game != null ? $"{game.FullName}" : "N/A";
+    }
+
+
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHttp = await repository.GetAsync<List<Mod>>("api/mods");
+        Mods = responseHttp.Response!;
+
+        var creatorResponse = await repository.GetAsync<List<Creator>>("api/creators");
+        Creators= creatorResponse.Response!;
+
+        var gamesResponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = gamesResponse.Response!;
+    }
+
+    private async Task Delete(Mod mod)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = "¿Esta seguro que quieres borrar el registro?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"api/mods/{mod.Id}");
+
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var errorMessage = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+
+    }
+
+}
