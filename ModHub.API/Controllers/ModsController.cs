@@ -45,6 +45,7 @@ namespace ModHub.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Mod mod)
         {
+            mod.UpdateDate = DateTime.Now;
             _Context.Mods.Update(mod);
             await _Context.SaveChangesAsync();
             return Ok(mod);
