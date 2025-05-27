@@ -82,6 +82,12 @@ else
                                             @mod.ModStatus
                                         </td>
                                         <td>
+                                            @GetCreatorName(mod.CreatorId)
+                                        </td>
+                                        <td>
+                                            @GetGamesName(mod.GameId)
+                                        </td>
+                                        <td>
                                             <a href="/mods/edit/@mod.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
                                             <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(mod))><i class="oi oi-trash" /> Borrar</button>   
                                         </td>
@@ -101,6 +107,26 @@ else
 {
     public List<Mod> Mods { get; set; }
 
+    public List<Creator> Creators { get; set; }
+
+    public List<Game> Games { get; set; }
+
+
+    private string GetCreatorName(int? creatorId)
+    {
+        var creator = Creators.FirstOrDefault(r => r.Id == creatorId);
+        return creator != null ? $"{creator.FullName}" : "N/A";
+    }
+
+    private string GetGamesName(int gameID)
+    {
+        var game = Games.FirstOrDefault(g => g.Id == gameID);
+        return game != null ? $"{game.FullName}" : "N/A";
+    }
+
+
+
+
     protected async override Task OnInitializedAsync()
     {
         await Load();
@@ -110,6 +136,12 @@ else
     {
         var responseHttp = await repository.GetAsync<List<Mod>>("api/mods");
         Mods = responseHttp.Response!;
+
+        var creatorResponse = await repository.GetAsync<List<Creator>>("api/creators");
+        Creators= creatorResponse.Response!;
+
+        var gamesResponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = gamesResponse.Response!;
     }
 
     private async Task Delete(Mod mod)
