@@ -1,0 +1,40 @@
+﻿@page "/gameCategories/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Agregar GameCategory</h1>
+
+<GameCategoriesForm @ref="gameCategoriesForm" GameCategory="gameCategory" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private GameCategory gameCategory = new();
+    private GameCategoriesForm gameCategoriesForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/gameCategories", gameCategory);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            gameCategoriesForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/gameCategories");
+        }
+        navigationManager.NavigateTo("/gameCategories");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/gameCategories");
+    }
+}
+creator
