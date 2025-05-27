@@ -1,4 +1,4 @@
-﻿@page "/gameCategoies/edit/{Id:int}"
+﻿@page "/gamescategoies/edit/{Id:int}"
 
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
@@ -16,24 +16,24 @@
 }
 else
 {
-    <GameCategoriesForm @ref="gameCategoryForm" GameCategory="gameCategory" OnValidSubmit="Edit" ReturnAction="Return"/>
+    <GamesCategoriesForm @ref="gameCategoryForm" GameCategory="gameCategory" OnValidSubmit="Edit" ReturnAction="Return"/>
 }
 
 @code {
     private GameCategory gameCategory;
-    private GameCategoriesForm gameCategoryForm;
+    private GamesCategoriesForm gameCategoryForm;
 
     [Parameter]
     public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.GetAsync<GameCategory>($"/api/gameCategories/{Id}");
+        var responseHttp = await repository.GetAsync<GameCategory>($"/api/gamescategories/{Id}");
         if (responseHttp.Error)
         {
             if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/gameCategories");
+                navigationManager.NavigateTo("/gamescategories");
                 return;
             }
             else
@@ -50,7 +50,7 @@ else
 
     private async Task Edit()
     {
-        var responseHttp = await repository.PutAsync($"/api/gameCategories", gameCategory);
+        var responseHttp = await repository.PutAsync($"/api/gamescategories", gameCategory);
         if (responseHttp.Error)
         {
             var errorMessage = await responseHttp.GetErrorMessage();
@@ -59,13 +59,13 @@ else
         else
         {
             gameCategoryForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/gameCategories");
+            navigationManager.NavigateTo("/gamescategories");
         }
     }
 
     private void Return()
     {
-        navigationManager.NavigateTo("/gameCategories");
+        navigationManager.NavigateTo("/gamescategories");
     }
 }
 

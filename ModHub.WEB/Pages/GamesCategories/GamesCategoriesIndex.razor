@@ -1,4 +1,4 @@
-﻿@page "/categories"
+﻿@page "/gamescategories"
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
 @using ModHub.WEB.Repositories
@@ -8,22 +8,22 @@
 @inject NavigationManager navigationManager
 @inject SweetAlertService swal
 
-<h1>GameCategories</h1>
+<h1>Categorias de Juegos</h1>
 
-@if (GameCategories is null)
+@if (GamesCategories is null)
 {
     <div class="spinner" />
-    <a class="btn btn-outline-primary float-end" href="/gameCategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
+    <a class="btn btn-outline-primary float-end" href="/gamescategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
 }
 else
 {
-    <GenericList MyList="GameCategories" CreateUrl="/gameCategories/create">
+    <GenericList MyList="GamesCategories" CreateUrl="/gamescategories/create">
         <Body>
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="bi bi-person-fill"></i> Categodia De Juego
-                        <a class="btn btn-sm btn-primary float-end" href="/gameCategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
+                        <i class="bi bi-person-fill"></i> Categoria De Juego
+                        <a class="btn btn-sm btn-primary float-end" href="/gamescategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
                     </span>
                 </div>
             </div>
@@ -37,7 +37,7 @@ else
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var gameCategory in GameCategories)
+                            @foreach (var gameCategory in GamesCategories)
                             {
                                 <tr>
                                     <td>@GetGameFullName(gameCategory.GameId)</td>
@@ -57,7 +57,7 @@ else
 }
 
 @code {
-    public List<GameCategory> GameCategories { get; set; }
+    public List<GameCategory> GamesCategories { get; set; }
     public List<Game> Games { get; set; }
     public List<Category> Categories { get; set; }
 
@@ -81,8 +81,8 @@ else
 
     private async Task Load()
     {
-        var responseHttp = await repository.GetAsync<List<GameCategory>>("api/gameCategories");
-        GameCategories = responseHttp.Response!;
+        var responseHttp = await repository.GetAsync<List<GameCategory>>("api/gamescategories");
+        GamesCategories = responseHttp.Response!;
 
         var gameresponse = await repository.GetAsync<List<Game>>("api/games");
         Games = gameresponse.Response!;
@@ -110,7 +110,7 @@ else
             return;
         }
 
-        var responseHttp = await repository.DeleteAsync($"api/gameCategories/{gameCategory.Id}");
+        var responseHttp = await repository.DeleteAsync($"api/gamescategories/{gameCategory.Id}");
 
         if (responseHttp.Error)
         {

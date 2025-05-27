@@ -1,4 +1,4 @@
-﻿@page "/gameCategories/create"
+﻿@page "/gamescategories/create"
 
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
@@ -9,15 +9,15 @@
 
 <h1>Agregar GameCategory</h1>
 
-<GameCategoriesForm @ref="gameCategoriesForm" GameCategory="gameCategory" OnValidSubmit="Create" ReturnAction="Return"/>
+<GamesCategoriesForm @ref="gameCategoriesForm" GameCategory="gameCategory" OnValidSubmit="Create" ReturnAction="Return"/>
 
 @code {
     private GameCategory gameCategory = new();
-    private GameCategoriesForm gameCategoriesForm;
+    private GamesCategoriesForm gameCategoriesForm;
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/gameCategories", gameCategory);
+        var responseHttp = await repository.PostAsync("/api/gamescategories", gameCategory);
         if (responseHttp.Error)
         {
             var errorMessage = await responseHttp.GetErrorMessage();
@@ -27,14 +27,13 @@
         else
         {
             gameCategoriesForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/gameCategories");
+            navigationManager.NavigateTo("/gamescategories");
         }
-        navigationManager.NavigateTo("/gameCategories");
+        navigationManager.NavigateTo("/gamescategories");
     }
 
     private void Return()
     {
-        navigationManager.NavigateTo("/gameCategories");
+        navigationManager.NavigateTo("/gamescategories");
     }
 }
-creator

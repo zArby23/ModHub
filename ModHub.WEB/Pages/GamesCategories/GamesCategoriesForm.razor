@@ -1,5 +1,4 @@
-﻿@page "/forums/form"
-
+﻿
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
 
@@ -14,7 +13,7 @@
     <div class="mb-3">
         <div class="mb-3">
             
-            <label>Juego Establecida (ID)</label>
+            <label>Juego</label>
             <div>
                 <InputSelect width="10" @bind-Value="@GameCategory.GameId" class="form-select">
                     <option value="">Seleccione el juego</option>
@@ -26,7 +25,7 @@
                 <ValidationMessage For="@(() => GameCategory.GameId)" />
             </div>
 
-            <label>Juego Establecida (ID)</label>
+            <label>Categoria</label>
             <div>
                 <InputSelect width="10" @bind-Value="@GameCategory.CategoryId" class="form-select">
                     <option value="">Seleccione el juego</option>
