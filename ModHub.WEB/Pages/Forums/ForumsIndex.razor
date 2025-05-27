@@ -1,0 +1,128 @@
+﻿﻿@page "/forums"
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.WEB.Repositories
+@using ModHub.WEB.Shared
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Forums</h1>
+
+@if(Forums is null)
+{
+    <div class="spinner"/>
+    <a class="btn btn-outline-primary float-end" href="/forums/create"><i class="bi bi-person-fill-add"></i> Añadir Foro</a>
+}
+else
+{
+    <GenericList MyList="Forums" CreateUrl="/forums/create">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-person-fill"></i> Forums
+                        <a class="btn btn-sm btn-primary float-end" href="/forums/create"><i class="bi bi-person-fill-add"></i> Añadir Foror</a>
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                    <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Contenido</th>
+                            <th>Fecha</th>
+                            <th>Juego</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var forum in Forums)
+                        {
+                            <tr>
+                                <td>@forum.Title</td>
+                                <td>@forum.Content</td>
+                                <td>@forum.PublicationDate.ToString("d")</td>
+                                <td>@GetGameFullName(forum.GameId)</td>
+
+                                <td>
+                                    <a href="/forums/edit/@forum.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                    <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(forum))><i class="bi bi-trash-fill" /> Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </Body>
+    </GenericList>
+}
+
+@code {
+    public List<Forum> Forums { get; set; }
+    public List<Game> Games { get; set; }
+
+    private string GetGameFullName(int gameId)
+    {
+        var game = Games.FirstOrDefault(r => r.Id == gameId);
+        return game != null ? $"{game.FullName}" : "N/A";
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHttp = await repository.GetAsync<List<Forum>>("api/forums");
+        Forums = responseHttp.Response!;
+
+        var GameResponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = responseHttp.Response!;
+    }
+
+    private async Task Delete(Forum forum)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estas seguro?",
+            Text = "No podras revertir este cambio.",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Si, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+
+        var confirmation = string.IsNullOrEmpty(result.Value);
+
+        if (confirmation)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"api/forums/{forum.Id}");
+
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var errorMessage = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}
