@@ -25,7 +25,7 @@ namespace ModHub.Shared.Entities
 
         [Display(Name = "Fecha de Registro")] //Pone una Descripcion del campo
         [DataType(DataType.Date)]
-        public DateTime DateRegistration = DateTime.Now; //Fecha de registro por defecto es la fecha actual
+        public DateTime DateRegistration { get; set; } //Fecha de registro por defecto es la fecha actual
 
         //Conexiones
 
