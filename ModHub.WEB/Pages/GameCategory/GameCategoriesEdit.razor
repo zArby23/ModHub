@@ -1,0 +1,71 @@
+﻿@page "/gameCategoies/edit/{Id:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Actualizar datos</h1>
+
+@if(gameCategory is null)
+{
+    <div class="spinner"/>
+    <p>Cargando...</p>
+}
+else
+{
+    <GameCategoriesForm @ref="gameCategoryForm" GameCategory="gameCategory" OnValidSubmit="Edit" ReturnAction="Return"/>
+}
+
+@code {
+    private GameCategory gameCategory;
+    private GameCategoriesForm gameCategoryForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.GetAsync<GameCategory>($"/api/gameCategories/{Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/gameCategories");
+                return;
+            }
+            else
+            {
+                var message = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", message, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            gameCategory = responseHttp.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHttp = await repository.PutAsync($"/api/gameCategories", gameCategory);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+        }
+        else
+        {
+            gameCategoryForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/gameCategories");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/gameCategories");
+    }
+}
+
