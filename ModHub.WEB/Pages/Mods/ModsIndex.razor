@@ -10,22 +10,23 @@
 @inject SweetAlertService swal
 
 
-<h3>Mods</h3>
+<h1>Mods</h1>
 
 
 @if (Mods is null)
 {
     <div class="spinner" />
+    <a class="btn btn-outline-primary float-end" href="/mods/create"><i class="bi bi-person-fill-add"></i> Añadir Mod</a>
 }
 else
 {
-    <GenericList MyList="Mods">
+    <GenericList MyList="Mods" CreateUrl="/mods/create">
         <Body>
             <div class="card">
                 <div class="card-header">
                     <span>
-                        <i class="oi oi-globe"></i> Guías
-                        <a class="btn btn-sm btn-primary float-end" href="/guias/create"><i class="oi oi-plus"></i>Crear guia</a>
+                        <i class="oi oi-globe"></i> Mods
+                        <a class="btn btn-sm btn-primary float-end" href="/mods/create"><i class="oi oi-plus"></i>Crear mod</a>
                     </span>
                 </div>
                 <div class="card-body">
@@ -46,13 +47,19 @@ else
                                         Version
                                     </th>
                                     <th>
-                                        FechaPublicacion
+                                        Fecha de Publicación
                                     </th>
                                     <th>
-                                        FechaActualizacion
+                                        Fecha de Actualizacion
                                     </th>
                                     <th>
                                         Estado
+                                    </th>
+                                    <th>
+                                        Creador del Mod
+                                    </th>
+                                    <th>
+                                        Juego
                                     </th>
                                 </tr>
                             </thead>
@@ -73,10 +80,10 @@ else
                                             @mod.Version
                                         </td>
                                         <td>
-                                            @mod.PublicationDate
+                                            @mod.PublicationDate.ToString("g")
                                         </td>
                                         <td>
-                                            @mod.UpdateDate
+                                            @mod.UpdateDate.ToString("g")
                                         </td>
                                         <td>
                                             @mod.ModStatus

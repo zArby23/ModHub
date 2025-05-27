@@ -3,7 +3,8 @@
 
 @inject NavigationManager Navigation
 @inject SweetAlertService swal
-<h3>ModsForm</h3>
+
+@inject HttpClient Http
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
@@ -13,43 +14,56 @@
         <div class="mb-3">
             <label>Nombre</label>
             <div>
-                <InputText width="10" @bind-Value="@mod.Name" />
-                <ValidationMessage For="@(() => mod.Name)" />
+                <InputText width="10" @bind-Value="@Mod.Name" />
+                <ValidationMessage For="@(() => Mod.Name)" />
             </div>
             <label>Genero</label>
             <div>
-                <InputText width="10" @bind-Value="@mod.Genre" />
-                <ValidationMessage For="@(() => mod.Genre)" />
+                <InputText width="10" @bind-Value="@Mod.Genre" />
+                <ValidationMessage For="@(() => Mod.Genre)" />
             </div>
             <label>Descripcion</label>
             <div>
-                <InputText width="10" @bind-Value="@mod.Description" />
-                <ValidationMessage For="@(() => mod.Description)" />
+                <InputText width="10" @bind-Value="@Mod.Description" />
+                <ValidationMessage For="@(() => Mod.Description)" />
             </div>
             <label>Version</label>
             <div>
-                <InputNumber width="10" @bind-Value="@mod.Version" />
-                <ValidationMessage For="@(() => mod.Version)" />
+                <InputNumber width="10" @bind-Value="@Mod.Version" />
+                <ValidationMessage For="@(() => Mod.Version)" />
             </div>
-            <label>Fecha de Publicacion</label>
+            <label>Juego</label>
             <div>
-                <InputDate width="10" @bind-Value="@mod.PublicationDate" />
-                <ValidationMessage For="@(() => mod.PublicationDate)" />
+                <InputSelect width="10" @bind-Value="@Mod.GameId" class="form-select">
+                    <option value="">Seleccione el juego</option>
+                    @foreach (var game in games)
+                    {
+                        <option value="@game.Id">@game.FullName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Mod.Game)" />
             </div>
-            <label>Fecha de Actualizacion</label>
+            <label>Creador</label>
             <div>
-                <InputDate width="10" @bind-Value="@mod.UpdateDate" />
-                <ValidationMessage For="@(() => mod.UpdateDate)" />
+                <InputSelect width="10" @bind-Value="@Mod.CreatorId" class="form-select">
+                    <option value="">Seleccione el creador</option>
+                    @foreach (var creator in creators)
+                    {
+                        <option value="@creator.Id">@creator.FullName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Mod.Creator)" />
             </div>
             <label>Estatus</label>
             <div>
-                <InputSelect @bind-Value="@mod.ModStatus">
+                <InputSelect @bind-Value="@Mod.ModStatus">
+                    <option value="">Seleccione el estado</option>
                     @foreach (ModStatus status in Enum.GetValues(typeof(ModStatus)))
                     {
                         <option value="@status">@status</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="@(() => mod.ModStatus)" />
+                <ValidationMessage For="@(() => Mod.ModStatus)" />
             </div>
             <button class="btn btn-primary" type="submit">Guardar</button>
             <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
@@ -61,16 +75,25 @@
 @code 
 {
 
+    private List<Game> games = new();
+    private List<Creator> creators = new();
     private EditContext editContext = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        games = await Http.GetFromJsonAsync<List<Game>>("/api/games");
+        creators = await Http.GetFromJsonAsync<List<Creator>>("/api/creators");
+    }
 
     protected override void OnInitialized()
     {
-        editContext = new(mod);
+        editContext = new(Mod);
     }
 
     [EditorRequired]
     [Parameter]
-    public Mod mod { get; set; }
+    public Mod Mod { get; set; }
 
     [EditorRequired]
     [Parameter]
@@ -113,7 +136,5 @@
 
         context.PreventNavigation();
     }
-
-}
 
 }
