@@ -1,4 +1,4 @@
-﻿﻿@page "/forums"
+﻿@page "/forums"
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
 @using ModHub.WEB.Repositories
@@ -84,7 +84,7 @@ else
         Forums = responseHttp.Response!;
 
         var GameResponse = await repository.GetAsync<List<Game>>("api/games");
-        Games = responseHttp.Response!;
+        Games = GameResponse.Response!;
     }
 
     private async Task Delete(Forum forum)

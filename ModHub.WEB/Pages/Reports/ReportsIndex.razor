@@ -1,4 +1,5 @@
-﻿﻿@page "/reports"
+﻿@page "/reports"
+
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
 @using ModHub.WEB.Repositories
@@ -62,7 +63,7 @@ else
     public List<Report> Reports { get; set; }
     public List<Mod> Mods { get; set; }
 
-    private string GetModName(int modId)
+    private string GetModName(int? modId)
     {
         var mod = Mods.FirstOrDefault(m => m.Id == modId);
         return mod != null ? $"{mod.Name}" : "N/A";
