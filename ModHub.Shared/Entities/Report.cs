@@ -23,10 +23,16 @@ namespace ModHub.Shared.Entities
 
         [JsonIgnore]
         public Mod Mod { get; set; }
-        public int ModId { get; set; }
+        public int? ModId { get; set; }
 
         [JsonIgnore]
         public Creator Creator { get; set; }
-        public int CreatorId { get; set; }
+        public int? CreatorId { get; set; }
+
+        [MaxLength(75)]
+        public string CreatorName { get; set; }
+
+        [MaxLength(75)]
+        public string ModName { get; set; }
     }
 }

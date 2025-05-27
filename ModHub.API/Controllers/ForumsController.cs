@@ -5,13 +5,13 @@ using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
-    [Route("api/gamescategories")]
+    [Route("api/forums")]
     [ApiController]
-    public class GamesCategoriesController : ControllerBase
+    public class ForumsController : ControllerBase
     {
         private readonly DataContext _Context;
 
-        public GamesCategoriesController(DataContext context)
+        public ForumsController(DataContext context)
         {
             _Context = context;
         }
@@ -19,41 +19,41 @@ namespace ModHub.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var gamecategory = await _Context.GamesCategories.ToListAsync();
-            return Ok(gamecategory);
+            var forums = await _Context.Forums.ToListAsync();
+            return Ok(forums);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var category = await _Context.GamesCategories.FirstOrDefaultAsync(x => x.Id == id);
-            if (category == null)
+            var forums = await _Context.Forums.FirstOrDefaultAsync(x => x.Id == id);
+            if (forums == null)
             {
                 return NotFound();
             }
-            return Ok(category);
+            return Ok(forums);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GameCategories([FromBody] GameCategory gameCategory)
+        public async Task<IActionResult> Post([FromBody] Forum forum)
         {
-            _Context.GamesCategories.Add(gameCategory);
+            _Context.Forums.Add(forum);
             await _Context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = gameCategory.Id }, gameCategory);
+            return CreatedAtAction(nameof(Get), new { id = forum.Id }, forum);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(GameCategory gameCategory)
+        public async Task<IActionResult> Put(Forum forum)
         {
-            _Context.GamesCategories.Update(gameCategory);
+            _Context.Forums.Update(forum);
             await _Context.SaveChangesAsync();
-            return Ok(gameCategory);
+            return Ok(forum);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var FilasAfectadas = await _Context.GamesCategories
+            var FilasAfectadas = await _Context.Forums
                     .Where(x => x.Id == id)
                     .ExecuteDeleteAsync();
             if (FilasAfectadas == 0)

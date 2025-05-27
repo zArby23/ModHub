@@ -27,6 +27,24 @@ namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.Creator)
+                .WithMany(c => c.Reports)
+                .HasForeignKey(r => r.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.Mod)
+                .WithMany(m => m.Reports)
+                .HasForeignKey(r => r.ModId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Mod>()
+                .HasOne(m => m.Creator)
+                .WithMany(c => c.Mods)
+                .HasForeignKey(m => m.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
     

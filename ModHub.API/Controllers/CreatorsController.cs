@@ -53,6 +53,21 @@ namespace ModHub.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var creator = await _Context.Creators.FirstOrDefaultAsync(x => x.Id == id);
+            var reports = _Context.Reports.Where(r => r.CreatorId == id).ToList();
+            var mods = _Context.Mods.Where(m => m.CreatorId == id).ToList();
+            foreach (var report in reports)
+            {
+                report.CreatorName = "[Deleted Creator]";
+                report.CreatorId = null;
+            }
+            foreach (var mod in mods)
+            {
+                mod.CreatorName = "[Deleted Creator]";
+                mod.CreatorId = null;
+            }
+            await _Context.SaveChangesAsync();
+
             var FilasAfectadas = await _Context.Creators
                     .Where(x => x.Id == id)
                     .ExecuteDeleteAsync();
