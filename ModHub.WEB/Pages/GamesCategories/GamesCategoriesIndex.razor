@@ -1,4 +1,8 @@
-﻿@page "/gamescategories"
+﻿@* Proteger su uso para los admin *@
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+@page "/gamescategories"
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
 @using ModHub.WEB.Repositories
