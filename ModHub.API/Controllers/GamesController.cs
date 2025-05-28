@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModHub.API.Data;
 using ModHub.Shared.DTOs;
@@ -6,6 +8,8 @@ using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [Route("api/games")]
     [ApiController]
     public class GamesController : ControllerBase
@@ -16,14 +20,14 @@ namespace ModHub.API.Controllers
         {
             _Context = context;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var games = await _Context.Games.ToListAsync();
             return Ok(games);
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
