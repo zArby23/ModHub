@@ -7,6 +7,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ModHub.Shared.Enums;
 using Microsoft.AspNetCore.Identity;
+using ModHub.Shared.Entities;
+using System.Security.Claims;
 
 namespace ModHub.Shared.Entities
 {
@@ -40,6 +42,8 @@ namespace ModHub.Shared.Entities
 
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
-
     }
 }
+
+
+
