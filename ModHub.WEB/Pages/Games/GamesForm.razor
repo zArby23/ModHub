@@ -1,35 +1,94 @@
 ﻿@using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
+@using ModHub.Shared.DTOs
 
 @inject NavigationManager navigationManager
 @inject SweetAlertService swal
+@inject HttpClient Http
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
-<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
-    <div class="mb-3">
+@if(editContext != null)
+{
+    <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
         <div class="mb-3">
-            <label>Nombre</label>
-            <div>
-                <InputText width="10" @bind-Value="@Game.FullName" />
-                <ValidationMessage For="@(() => Game.FullName)" />
+            <div class="mb-3">
+                <label>Nombre</label>
+                <div>
+                    <InputText width="10" @bind-Value="@Game.FullName" />
+                    <ValidationMessage For="@(() => Game.FullName)" />
+                </div>
+                <label>Descripción</label>
+                <div>
+                    <InputText width="10" @bind-Value="@Game.Description" />
+                    <ValidationMessage For="@(() => Game.Description)" />
+                </div>
+                <label>Categorías</label>
+                <div>
+                    <select multiple class="form-select" style="min-height: 120px;" @onchange="OnCategoriesChanged">
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.Id" selected="@selectedCategoryIds.Contains(category.Id)">
+                                @category.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+                @if (selectedCategoryIds.Any())
+                {
+                    <div class="mt-2">
+                        @foreach (var categoryId in selectedCategoryIds)
+                        {
+                            var category = categories.FirstOrDefault(c => c.Id == categoryId);
+                            if (category is not null)
+                            {
+                                <span class="badge bg-primary me-1">
+                                    @category.Name
+                                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" style="font-size:0.7em;" @onclick="() => RemoveCategory(categoryId)"></button>
+                                </span>
+                            }
+                        }
+                    </div>
+                }
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
             </div>
-            <label>Correo Electrónico</label>
-            <div>
-                <InputText width="10" @bind-Value="@Game.Description" />
-                <ValidationMessage For="@(() => Game.Description)" />
-            </div>
-            <button class="btn btn-primary" type="submit">Guardar</button>
-            <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
         </div>
-    </div>
-</EditForm>
+    </EditForm>
+}
+else
+{
+    <div class="spinner" />
+    <p>Cargando...</p>
+}
+
 
 @code {
     private EditContext editContext = null!;
-    protected override void OnInitialized()
+    private List<Category> categories = new();
+    private List<int> selectedCategoryIds = new();
+
+    public List<int> SelectedCategoryIds => selectedCategoryIds;
+
+    protected override async Task OnInitializedAsync()
     {
-        editContext = new(Game);
+        categories = await Http.GetFromJsonAsync<List<Category>>("/api/categories");
+    }
+
+    protected override void OnParametersSet()
+    {
+        if(Game != null)
+        {
+            if (editContext == null || editContext.Model != Game)
+            {
+                editContext = new EditContext(Game);
+            }
+        }
+    }
+
+    private void RemoveCategory(int categoryId)
+    {
+        selectedCategoryIds.Remove(categoryId);
     }
 
     [EditorRequired]
@@ -77,5 +136,18 @@
             return;
         }
         context.PreventNavigation();
+    }
+
+    private void OnCategoriesChanged(ChangeEventArgs e)
+    {
+        var selectedOptions = e.Value as IEnumerable<string>;
+        if (selectedOptions != null)
+        {
+            selectedCategoryIds = selectedOptions.Select(int.Parse).ToList();
+        }
+        else
+        {
+            selectedCategoryIds.Clear();
+        }
     }
 }

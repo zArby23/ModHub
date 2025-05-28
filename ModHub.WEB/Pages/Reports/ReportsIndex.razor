@@ -33,6 +33,7 @@ else
                     <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Creador que reporta</th>
                             <th>Titulo</th>
                             <th>Contenido</th>
                             <th>Mod</th>
@@ -42,6 +43,7 @@ else
                         @foreach (var report in Reports)
                         {
                             <tr>
+                                <td>@GetCreatorName(report.CreatorId)</td>
                                 <td>@report.Title</td>
                                 <td>@report.Content</td>
                                 <td>@GetModName(report.ModId)</td>
@@ -62,11 +64,18 @@ else
 @code {
     public List<Report> Reports { get; set; }
     public List<Mod> Mods { get; set; }
+    public List<Creator> Creators { get; set; }
 
     private string GetModName(int? modId)
     {
         var mod = Mods.FirstOrDefault(m => m.Id == modId);
         return mod != null ? $"{mod.Name}" : "N/A";
+    }
+
+    private string GetCreatorName(int? creatorId)
+    {
+        var creator = Creators.FirstOrDefault(c => c.Id == creatorId);
+        return creator != null ? $"{creator.FullName}" : "[Creador Borrado]";
     }
 
     protected override async Task OnInitializedAsync()
@@ -81,6 +90,9 @@ else
 
         var ModResponseHttp = await repository.GetAsync<List<Mod>>("api/mods");
         Mods = ModResponseHttp.Response!;
+
+        var CreatorResponseHttp = await repository.GetAsync<List<Creator>>("api/creators");
+        Creators = CreatorResponseHttp.Response!;
     }
 
     private async Task Delete(Report report)

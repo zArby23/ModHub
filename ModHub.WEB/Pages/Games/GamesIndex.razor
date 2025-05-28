@@ -35,6 +35,7 @@ else
                             <tr>
                                 <th>Nombre del Juego</th>
                                 <th>Descripción</th>
+                                <th>Categorias</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,25 +45,53 @@ else
                                     <td>@game.FullName</td>
                                     <td>@game.Description</td>
                                     <td>
+                                        <ul>
+                                            @foreach (var category in GetCategoriesForGame(game.Id))
+                                            {
+                                                <span class="badge bg-primary me-1">@category.Name</span>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>
                                         <a href="/games/edit/@game.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
                                         <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(game))><i class="bi bi-trash-fill" /> Borrar</button>
                                     </td>
                                 </tr>
                             }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </Body>
-</GenericList>
+        </Body>
+    </GenericList>
 }
 
 @code {
     public List<Game> Games { get; set; }
+    public List<Category> Categories { get; set; }
+    public List<GameCategory> GamesCategories { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        var gamesResponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = gamesResponse.Response!;
+
+        var categoriesResponse = await repository.GetAsync<List<Category>>("api/categories");
+        Categories = categoriesResponse.Response!;
+
+        var gamesCategoriesResponse = await repository.GetAsync<List<GameCategory>>("api/gamescategories");
+        GamesCategories = gamesCategoriesResponse.Response!;
+
         await Load();
+    }
+
+    private IEnumerable<Category> GetCategoriesForGame(int gameId)
+    {
+        var categoryIds = GamesCategories
+            .Where(gc => gc.GameId == gameId)
+            .Select(gc => gc.CategoryId);
+
+        return Categories.Where(c => categoryIds.Contains(c.Id));
     }
 
     private async Task Load()

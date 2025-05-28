@@ -2,6 +2,7 @@
 
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
+@using ModHub.Shared.DTOs
 
 @inject IRepository repository
 @inject NavigationManager navigationManager
@@ -17,7 +18,13 @@
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/games", game);
+        var dto = new GameWithCategoriesDto
+        {
+            Game = game,
+            CategoryIds = gamesForm?.SelectedCategoryIds ?? new List<int>()
+        };
+
+        var responseHttp = await repository.PostAsync("/api/games/with-categories", dto);
         if (responseHttp.Error)
         {
             var errorMessage = await responseHttp.GetErrorMessage();

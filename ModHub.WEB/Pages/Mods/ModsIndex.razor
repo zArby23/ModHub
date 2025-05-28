@@ -122,13 +122,13 @@ else
     private string GetCreatorName(int? creatorId)
     {
         var creator = Creators.FirstOrDefault(r => r.Id == creatorId);
-        return creator != null ? $"{creator.FullName}" : "N/A";
+        return creator != null ? $"{creator.FullName}" : "[Creador Eliminado]";
     }
 
     private string GetGamesName(int gameID)
     {
         var game = Games.FirstOrDefault(g => g.Id == gameID);
-        return game != null ? $"{game.FullName}" : "N/A";
+        return game != null ? $"{game.FullName}" : "[Juego Eliminado]";
     }
 
 
