@@ -35,12 +35,5 @@ namespace ModHub.Shared.Entities
         [JsonIgnore]
         public ICollection<Mod> Mods { get; set; }
 
-        [JsonIgnore]
-        public ICollection<User> Users { get; set; }
-
-        
-
-
-
     }
 }

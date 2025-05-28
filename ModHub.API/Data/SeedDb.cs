@@ -1,17 +1,20 @@
-﻿using System.Diagnostics.Metrics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ModHub.API.Helpers;
 using ModHub.Shared.Entities;
 using ModHub.Shared.Enums;
+using System.Diagnostics.Metrics;
 
 namespace ModHub.API.Data
 {
     public class SeedDb
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext context)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -24,8 +27,43 @@ namespace ModHub.API.Data
             await CheckCategoriesAsync();
             await CheckGamesCategoriesAsync();
             await CheckForumsAsync();
-
+            await CheckRolesAsync();
+            await CheckUserAsync("1", "OAP", "OAP", "oap@yopmail.com", "CR 78 9687", UserType.Admin);
         }
+
+        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string direccion, UserType userType)
+        {
+            var user = await _userHelper.GetUserAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+
+                    Document = document,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    Address = direccion,
+
+                    UserName = email,
+
+
+                    UserType = userType,
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+            }
+
+            return user;
+        }
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+        }
+
+
 
         private async Task CheckCreatorsAsync()
         {
