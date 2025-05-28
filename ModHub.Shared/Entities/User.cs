@@ -6,13 +6,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ModHub.Shared.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace ModHub.Shared.Entities
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-
         [Display(Name = "Documento")]
         [MaxLength(20, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
