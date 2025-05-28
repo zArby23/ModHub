@@ -11,7 +11,7 @@
     <div class="mb-3">
         <div class="mb-3">
 
-            <label>Mod a Reportar (ID)</label>
+            <label>Mod a Reportar</label>
             <div>
                 <InputSelect width="10" @bind-Value="@Report.ModId" class="form-select">
                     <option value="">Seleccione un mod</option>
@@ -20,7 +20,19 @@
                         <option value="@mod.Id">@mod.Name</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="@(() => Report.Id)" />
+                <ValidationMessage For="@(() => Report.ModId)" />
+            </div>
+
+            <label>Creador que reporta</label>
+            <div>
+                <InputSelect width="10" @bind-Value="@Report.CreatorId" class="form-select">
+                    <option value="">Seleccione un craedor</option>
+                    @foreach (var creator in creators)
+                    {
+                        <option value="@creator.Id">@creator.FullName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Report.CreatorId)" />
             </div>
 
             <label>Nombre</label>
@@ -42,11 +54,13 @@
 
 @code {
     private List<Mod> mods = new();
+    private List<Creator> creators = new();
     private EditContext editContext = null!;
 
     protected override async Task OnInitializedAsync()
     {
         mods = await Http.GetFromJsonAsync<List<Mod>>("/api/mods");
+        creators = await Http.GetFromJsonAsync<List<Creator>>("/api/creators");
     }
 
     protected override void OnInitialized()
