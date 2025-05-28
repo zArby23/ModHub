@@ -44,7 +44,7 @@ namespace ModHub.Shared.Entities
         [Display(Name = "FechaActualizacion Mod")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
-        public DateTime UpdateDate { get; set; }
+        public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Estado Mod")]
         public ModStatus ModStatus { get; set; }

@@ -24,7 +24,8 @@ namespace ModHub.Shared.Entities
 
         [Display(Name = "Fecha de publicacion comentario")]
         [DataType(DataType.Date)]
-        public DateTime PublicationDate = DateTime.Now; //Fecha de registro por defecto es la fecha actual
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime PublicationDate { get; set; } = DateTime.Now; //Fecha de registro por defecto es la fecha actual
 
         //Conexion
         [JsonIgnore]
