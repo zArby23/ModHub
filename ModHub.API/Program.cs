@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModHub.API.Data;
+using ModHub.API.Helpers;
+using ModHub.Shared.Entities;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +27,19 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<DataContext>(x=>x.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddTransient<SeedDb>();
 
+builder.Services.AddIdentity<User, IdentityRole>(x =>
+{
+    x.User.RequireUniqueEmail = true;
+    x.Password.RequireDigit = false;
+    x.Password.RequiredUniqueChars = 0;
+    x.Password.RequireLowercase = false;
+    x.Password.RequireNonAlphanumeric = false;
+    x.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IUserHelper, UserHelper>();
 
 
 var app = builder.Build();
@@ -64,6 +80,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
