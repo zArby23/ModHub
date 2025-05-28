@@ -1,4 +1,4 @@
-﻿@page "/categories/edit/{Id:int}"
+﻿@page "/forums/edit/{Id:int}"
 
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
@@ -9,31 +9,31 @@
 
 <h1>Actualizar datos</h1>
 
-@if(category is null)
+@if(forum is null)
 {
     <div class="spinner"/>
     <p>Cargando...</p>
 }
 else
 {
-    <CategoriesForm @ref="categoryForm" Category="category" OnValidSubmit="Edit" ReturnAction="Return"/>
+    <ForumsForm @ref="forumForm" Forum="forum" OnValidSubmit="Edit" ReturnAction="Return"/>
 }
 
 @code {
-    private Category category;
-    private CategoriesForm categoryForm;
+    private Forum forum;
+    private ForumsForm forumForm;
 
     [Parameter]
     public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.GetAsync<Category>($"/api/categories/{Id}");
+        var responseHttp = await repository.GetAsync<Forum>($"/api/forums/{Id}");
         if (responseHttp.Error)
         {
             if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/categories");
+                navigationManager.NavigateTo("/forums");
                 return;
             }
             else
@@ -44,13 +44,13 @@ else
         }
         else
         {
-            category = responseHttp.Response;
+            forum = responseHttp.Response;
         }
     }
 
     private async Task Edit()
     {
-        var responseHttp = await repository.PutAsync($"/api/categories", category);
+        var responseHttp = await repository.PutAsync($"/api/forums", forum);
         if (responseHttp.Error)
         {
             var errorMessage = await responseHttp.GetErrorMessage();
@@ -58,13 +58,13 @@ else
         }
         else
         {
-            categoryForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/categories");
+            forumForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/forums");
         }
     }
 
     private void Return()
     {
-        navigationManager.NavigateTo("/categories");
+        navigationManager.NavigateTo("/forums");
     }
 }

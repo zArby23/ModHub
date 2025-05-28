@@ -1,0 +1,113 @@
+﻿@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+@inject HttpClient Http
+
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <div class="mb-3">
+
+            <label>Titulo</label>
+            <div>
+                <InputText width="10" @bind-Value="@Forum.Title" />
+                <ValidationMessage For="@(() => Forum.Title)" />
+            </div>
+
+
+            <label>Contenido</label>
+            <div>
+                <InputText width="10" @bind-Value="@Forum.Content" />
+                <ValidationMessage For="@(() => Forum.Content)" />
+            </div>
+
+            <label>Fecha de publicación</label>
+            <div>
+                <InputDate width="10" @bind-Value="@Forum.PublicationDate" />
+                <ValidationMessage For="@(() => Forum.PublicationDate)" />
+            </div>
+
+            <label>Juego Establecida (ID)</label>
+            <div>
+                <InputSelect width="10" @bind-Value="@Forum.GameId" class="form-select">
+                    <option value="">Seleccione el juego</option>
+                    @foreach (var game in games)
+                    {
+                        <option value="@game.Id">@game.FullName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Forum.GameId)" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Guardar</button>
+            <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private EditContext editContext = null!;
+    private List<Game> games = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        games = await Http.GetFromJsonAsync<List<Game>>("/api/games");
+    }
+
+
+    protected override void OnInitialized()
+    {
+        editContext = new(Forum);
+    }
+
+    [EditorRequired]
+    [Parameter]
+    public Forum Forum { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+    public bool FormPostedSuccessfully { get; set; } = false;
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var formWasEdited = editContext.IsModified();
+
+        if (!formWasEdited)
+        {
+            return;
+        }
+
+        if (FormPostedSuccessfully)
+        {
+            return;
+        }
+
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Quieres salir?",
+                Text = "Tienes cambios sin guardar.",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Sí",
+                CancelButtonText = "No",
+                ReverseButtons = true
+            });
+
+        var confirmation = !string.IsNullOrEmpty(result.Value);
+        if (confirmation)
+        {
+            return;
+        }
+        context.PreventNavigation();
+    }
+}

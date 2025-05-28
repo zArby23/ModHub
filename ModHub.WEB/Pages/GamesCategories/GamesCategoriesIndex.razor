@@ -1,0 +1,132 @@
+﻿@page "/gamescategories"
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.WEB.Repositories
+@using ModHub.WEB.Shared
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Categorias de Juegos</h1>
+
+@if (GamesCategories is null)
+{
+    <div class="spinner" />
+    <a class="btn btn-outline-primary float-end" href="/gamescategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
+}
+else
+{
+    <GenericList MyList="GamesCategories" CreateUrl="/gamescategories/create">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-person-fill"></i> Categoria De Juego
+                        <a class="btn btn-sm btn-primary float-end" href="/gamescategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre Del Juego</th>
+                                <th>Tipo De Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gameCategory in GamesCategories)
+                            {
+                                <tr>
+                                    <td>@GetGameFullName(gameCategory.GameId)</td>
+                                    <td>@GetCategoryName(gameCategory.CategoryId)</td>
+                                    <td>
+                                        <a href="/gameCategories/edit/@gameCategory.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(gameCategory))><i class="bi bi-trash-fill" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </Body>
+    </GenericList>
+}
+
+@code {
+    public List<GameCategory> GamesCategories { get; set; }
+    public List<Game> Games { get; set; }
+    public List<Category> Categories { get; set; }
+
+    private string GetGameFullName(int gameId)
+    {
+        var game = Games.FirstOrDefault(r => r.Id == gameId);
+        return game != null ? $"{game.FullName}" : "N/A";
+    }
+
+    private string GetCategoryName(int categoryId)
+    {
+        var category = Categories.FirstOrDefault(r => r.Id == categoryId);
+        return category != null ? $"{category.Name}" : "N/A";
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHttp = await repository.GetAsync<List<GameCategory>>("api/gamescategories");
+        GamesCategories = responseHttp.Response!;
+
+        var gameresponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = gameresponse.Response!;
+
+        var categoryresponse = await repository.GetAsync<List<Category>>("api/categories");
+        Categories = categoryresponse.Response!;
+    }
+
+    private async Task Delete(GameCategory gameCategory)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Estas seguro?",
+                Text = "No podras revertir este cambio.",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si, eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmation = string.IsNullOrEmpty(result.Value);
+
+        if (confirmation)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"api/gamescategories/{gameCategory.Id}");
+
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var errorMessage = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}

@@ -12,15 +12,15 @@ using ModHub.API.Data;
 namespace ModHub.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250519230551_ReportsNullableForeignKeys")]
-    partial class ReportsNullableForeignKeys
+    [Migration("20250527201025_AddDateRegistrationColumn")]
+    partial class AddDateRegistrationColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -55,6 +55,9 @@ namespace ModHub.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateRegistration")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -153,8 +156,12 @@ namespace ModHub.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CreatorName")
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -176,6 +183,9 @@ namespace ModHub.API.Migrations
                         .IsRequired()
                         .HasMaxLength(95)
                         .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -312,8 +322,7 @@ namespace ModHub.API.Migrations
                     b.HasOne("ModHub.Shared.Entities.Creator", "Creator")
                         .WithMany("Mods")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ModHub.Shared.Entities.Game", "Game")
                         .WithMany()

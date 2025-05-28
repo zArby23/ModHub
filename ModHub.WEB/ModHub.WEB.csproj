@@ -18,7 +18,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Pages\Mods\" />
-	  <Folder Include="Pages\Games\" />
 	</ItemGroup>
 
 </Project>

@@ -37,6 +37,7 @@ namespace ModHub.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Creator creator)
         {
+            creator.DateRegistration = DateTime.Now;
             _Context.Creators.Add(creator);
             await _Context.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = creator.Id }, creator);

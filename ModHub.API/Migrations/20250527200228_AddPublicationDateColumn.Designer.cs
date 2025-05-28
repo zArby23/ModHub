@@ -12,15 +12,15 @@ using ModHub.API.Data;
 namespace ModHub.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250519233839_ModsNullableCreatorId")]
-    partial class ModsNullableCreatorId
+    [Migration("20250527200228_AddPublicationDateColumn")]
+    partial class AddPublicationDateColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -180,6 +180,9 @@ namespace ModHub.API.Migrations
                         .IsRequired()
                         .HasMaxLength(95)
                         .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");

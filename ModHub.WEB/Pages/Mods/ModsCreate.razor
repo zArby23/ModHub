@@ -1,0 +1,40 @@
+﻿﻿﻿@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@page "/mods/create"
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+
+<h3>Crear Mod</h3>
+
+<ModsForm @ref="modsForm" Mod="mod" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    public Mod mod = new();
+    public ModsForm modsForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/mods", mod);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            modsForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/mods");
+        }
+        navigationManager.NavigateTo("/mods");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/mods");
+    }
+}

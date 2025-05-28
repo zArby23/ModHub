@@ -1,4 +1,4 @@
-﻿@page "/categories/edit/{Id:int}"
+﻿@page "/games/edit/{Id:int}"
 
 @using CurrieTechnologies.Razor.SweetAlert2
 @using ModHub.Shared.Entities
@@ -7,33 +7,34 @@
 @inject NavigationManager navigationManager
 @inject SweetAlertService swal
 
-<h1>Actualizar datos</h1>
+<h1>Editar Juego</h1>
 
-@if(category is null)
+@if (game is null)
 {
-    <div class="spinner"/>
+    <div class="spinner" />
     <p>Cargando...</p>
 }
 else
 {
-    <CategoriesForm @ref="categoryForm" Category="category" OnValidSubmit="Edit" ReturnAction="Return"/>
+    <GamesForm @ref="gameForm" Game="game" OnValidSubmit="Edit" ReturnAction="Return" />
 }
 
+
 @code {
-    private Category category;
-    private CategoriesForm categoryForm;
+    private Game game;
+    private GamesForm gameForm;
 
     [Parameter]
     public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.GetAsync<Category>($"/api/categories/{Id}");
+        var responseHttp = await repository.GetAsync<Game>($"/api/games/{Id}");
         if (responseHttp.Error)
         {
             if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/categories");
+                navigationManager.NavigateTo("/games");
                 return;
             }
             else
@@ -44,13 +45,12 @@ else
         }
         else
         {
-            category = responseHttp.Response;
+            game = responseHttp.Response;
         }
     }
-
     private async Task Edit()
     {
-        var responseHttp = await repository.PutAsync($"/api/categories", category);
+        var responseHttp = await repository.PutAsync($"/api/games", game);
         if (responseHttp.Error)
         {
             var errorMessage = await responseHttp.GetErrorMessage();
@@ -58,13 +58,12 @@ else
         }
         else
         {
-            categoryForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/categories");
+            gameForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/games");
         }
     }
-
     private void Return()
     {
-        navigationManager.NavigateTo("/categories");
+        navigationManager.NavigateTo("/games");
     }
 }
