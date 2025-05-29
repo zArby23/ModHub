@@ -38,7 +38,7 @@
         foreach (var imagen in imagenes)
         {
             var arrBytes = new byte[imagen.Size];
-            await imagen.OpenReadStream().ReadAsync(arrBytes);
+            await imagen.OpenReadStream(maxAllowedSize: 5*1024*1024).ReadAsync(arrBytes);
             imageBase64 = Convert.ToBase64String(arrBytes);
             ImageURL = null;
             await ImageSelected.InvokeAsync(imageBase64);
