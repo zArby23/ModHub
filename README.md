@@ -52,3 +52,7 @@ Este proyecto está bajo la licencia MIT.
 - 🧑‍💻 **Sebastián Ramírez Muñoz**
 
 ---
+
+### Gracias por todo.
+
+![Okay Lets Go](https://i1.sndcdn.com/artworks-s8BfYm7ZIpdgkIY5-tS5fGQ-t500x500.jpg)
