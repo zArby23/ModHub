@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">ModHub.WEB</a>
+        <a class="navbar-brand" href=""><b>ModHub</b></a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,8 +35,13 @@
     <AuthorizeView Roles="Admin">
         <Authorized>
         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Mods">
+                <span class="bi bi-wrench-adjustable-circle-fill-nav-menu" aria-hidden="true"></span> Mods
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="Categories">
-                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Categorias
+                <span class="bi bi-filter-square-fill-nav-menu" aria-hidden="true"></span> Categorias
             </NavLink>
         </div>
         </Authorized>
@@ -45,7 +50,7 @@
         @* Foros *@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="Forums">
-                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Foros
+                <span class="bi bi-chat-left-text-fill-nav-menu" aria-hidden="true"></span> Foros
             </NavLink>
         </div>
 
@@ -54,7 +59,7 @@
         <Authorized>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="GamesCategories">
-                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Categorias de juegos
+                <span class="bi bi-bookmark-fill-nav-menu" aria-hidden="true"></span> Categorias de juegos
             </NavLink>
         </div>
             </Authorized>
@@ -70,7 +75,7 @@
         @* Mods *@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="Mods">
-                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Mods
+                <span class="bi bi-flag-fill-nav-menu" aria-hidden="true"></span> Mods
             </NavLink>
         </div>
     </nav>
