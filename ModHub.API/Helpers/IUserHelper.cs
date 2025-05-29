@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ModHub.Shared.DTOs;
 using ModHub.Shared.Entities;
 
 namespace ModHub.API.Helpers
@@ -14,6 +15,11 @@ namespace ModHub.API.Helpers
         Task AddUserToRoleAsync(User user, string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginDTO model);
+
+        Task LogoutAsync();
+
 
     }
 }
