@@ -29,6 +29,9 @@ namespace ModHub.API.Data
             await CheckForumsAsync();
             await CheckRolesAsync();
             await CheckUserAsync("1", "OAP", "OAP", "oap@yopmail.com", "CR 78 9687", UserType.Admin);
+            await CheckUserAsync("2", "Arby", "Montoya", "zindax91@gmail.com", "CL 59 4957", UserType.Admin);
+            await CheckUserAsync("3", "Ramiro", "Bastián", "159sebastian.ramirez@gmail.com", "DIAG 50A", UserType.Admin);
+            await CheckUserAsync("4", "Emma", "Cardona", "emma1995@gmail.com", "CR 98 7562", UserType.Admin);
         }
 
         private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string direccion, UserType userType)
