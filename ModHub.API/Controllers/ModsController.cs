@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModHub.API.Data;
 using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [Route("api/mods")]
     [ApiController]
     public class ModsController : ControllerBase
@@ -15,14 +19,14 @@ namespace ModHub.API.Controllers
         {
             _Context = context;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var mods = await _Context.Mods.ToListAsync();
             return Ok(mods);
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -45,6 +49,7 @@ namespace ModHub.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Mod mod)
         {
+            mod.UpdateDate = DateTime.Now;
             _Context.Mods.Update(mod);
             await _Context.SaveChangesAsync();
             return Ok(mod);

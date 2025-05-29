@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModHub.API.Data;
 using ModHub.Shared.Entities;
 
 namespace ModHub.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [Route("api/creators")]
     [ApiController]
     public class CreatorsController : ControllerBase
@@ -15,14 +19,14 @@ namespace ModHub.API.Controllers
         {
             _Context = context;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var creators = await _Context.Creators.ToListAsync();
             return Ok(creators);
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -37,6 +41,7 @@ namespace ModHub.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Creator creator)
         {
+            creator.DateRegistration = DateTime.Now;
             _Context.Creators.Add(creator);
             await _Context.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = creator.Id }, creator);

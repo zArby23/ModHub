@@ -1,0 +1,70 @@
+﻿@page "/reports/edit/{Id:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Actualizar datos</h1>
+
+@if(report is null)
+{
+    <div class="spinner"/>
+    <p>Cargando...</p>
+}
+else
+{
+    <ReportsForm @ref="reportForm" Report="report" OnValidSubmit="Edit" ReturnAction="Return"/>
+}
+
+@code {
+    private Report report;
+    private ReportsForm reportForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.GetAsync<Report>($"/api/reports/{Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/reports");
+                return;
+            }
+            else
+            {
+                var message = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", message, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            report = responseHttp.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHttp = await repository.PutAsync($"/api/reports", report);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+        }
+        else
+        {
+            reportForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/reports");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/reports");
+    }
+}

@@ -1,0 +1,115 @@
+﻿@* Proteger su uso para los admin *@
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+@page "/categories"
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.WEB.Repositories
+@using ModHub.WEB.Shared
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Categorias</h1>
+
+@if(Categories is null)
+{
+    <div class="spinner"/>
+    <a class="btn btn-outline-primary float-end" href="/categories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria</a>
+}
+else
+{
+    <GenericList MyList="Categories" CreateUrl="/categories/create">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-person-fill"></i> Categorias
+                        <a class="btn btn-sm btn-primary float-end" href="/categories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria</a>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Categories)
+                            {
+                                <tr>
+                                    <td>@category.Name</td>
+                                    <td>@category.Description</td>
+                                    <td>
+                                        <a href="/categories/edit/@category.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(category))><i class="bi bi-trash-fill" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </Body>
+    </GenericList>
+}
+
+@code {
+    public List<Category> Categories { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var responseHttp = await repository.GetAsync<List<Category>>("api/categories");
+        Categories = responseHttp.Response!;
+    }
+
+    private async Task Delete(Category category)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estas seguro?",
+            Text = "No podras revertir este cambio.",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Si, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+
+        var confirmation = string.IsNullOrEmpty(result.Value);
+
+        if (confirmation)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"api/categories/{category.Id}");
+
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var errorMessage = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}

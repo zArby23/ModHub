@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ModHub.Shared.Entities;
 namespace ModHub.API.Data //Carpeta que permite la migracion a la base de datos
 {
     
-    public class DataContext : DbContext   
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) 
         {
         }
         public DbSet<GameCategory> GamesCategories { get; set; }
-
-        public DbSet<User> Users { get; set; }
 
         public DbSet<Mod> Mods { get; set; }
 

@@ -1,0 +1,75 @@
+﻿@page "/games/edit/{Id:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.Shared.DTOs
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Editar Juego</h1>
+
+@if (game is null)
+{
+    <div class="spinner" />
+    <p>Cargando...</p>
+}
+else
+{
+    <GamesForm @ref="gameForm" Game="game" OnValidSubmit="Edit" ReturnAction="Return" />
+}
+
+
+@code {
+    private Game game;
+    private GamesForm gameForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.GetAsync<Game>($"/api/games/{Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/games");
+                return;
+            }
+            else
+            {
+                var message = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", message, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            game = responseHttp.Response;
+        }
+    }
+    private async Task Edit()
+    {
+        var dto = new GameWithCategoriesDto
+        {
+            Game = game,
+            CategoryIds = gameForm?.SelectedCategoryIds ?? new List<int>()
+        };
+        var responseHttp = await repository.PutAsync($"/api/games/with-categories", dto);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+        }
+        else
+        {
+            gameForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/games");
+        }
+    }
+    private void Return()
+    {
+        navigationManager.NavigateTo("/games");
+    }
+}

@@ -1,0 +1,11 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <span style="text-decoration: dotted; color: aliceblue;">Hola, @context.User.Identity!.Name</span>
+        <a style="text-decoration: none; color: aliceblue;" href="Logout" class="nav-link btn btn-link"> <b>Cerrar Sesión </b></a>
+    </Authorized>
+    <NotAuthorized>
+        <a style="text-decoration: none; color: aliceblue;" href="Register" class="nav-link btn btn-link"> <b>Registro</b></a>
+        <a style="text-decoration: none; color: aliceblue;" href="Login" class="nav-link btn btn-link"><b>Iniciar Sesión</b></a>
+    </NotAuthorized>
+</AuthorizeView>
+

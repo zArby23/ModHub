@@ -1,0 +1,141 @@
+﻿@page "/games"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.WEB.Repositories
+@using ModHub.WEB.Shared
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Juegos</h1>
+
+@if (Games is null)
+{
+    <div class="spinner"/>
+    <a class="btn btn-outline-primary float-end" href="/creators/create"><i class="bi bi-person-fill-add"></i> Añadir Juego</a>
+}
+else
+{
+    <GenericList MyList="Games" CreateUrl="/games/create">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-controller"></i> Juegos
+                    <a class="btn btn-sm btn-primary float-end" href="/games/create"><i class="bi bi-controller"></i> Añadir Juego</a>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del Juego</th>
+                                    <th>Descripción</th>
+                                    <th>Categorias</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var game in Games)
+                                {
+                                    <tr>
+                                        <td>@game.FullName</td>
+                                        <td>@game.Description</td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var category in GetCategoriesForGame(game.Id))
+                                                {
+                                                    <span class="badge bg-primary me-1">@category.Name</span>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <a href="/games/edit/@game.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                            <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(game))><i class="bi bi-trash-fill" /> Borrar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </Body>
+    </GenericList>
+}
+
+@code {
+    public List<Game> Games { get; set; }
+    public List<Category> Categories { get; set; }
+    public List<GameCategory> GamesCategories { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var gamesResponse = await repository.GetAsync<List<Game>>("api/games");
+        Games = gamesResponse.Response!;
+
+        var categoriesResponse = await repository.GetAsync<List<Category>>("api/categories");
+        Categories = categoriesResponse.Response!;
+
+        var gamesCategoriesResponse = await repository.GetAsync<List<GameCategory>>("api/gamescategories");
+        GamesCategories = gamesCategoriesResponse.Response!;
+
+        await Load();
+    }
+
+    private IEnumerable<Category> GetCategoriesForGame(int gameId)
+    {
+        var categoryIds = GamesCategories
+            .Where(gc => gc.GameId == gameId)
+            .Select(gc => gc.CategoryId);
+
+        return Categories.Where(c => categoryIds.Contains(c.Id));
+    }
+
+    private async Task Load()
+    {
+        var responseHttp = await repository.GetAsync<List<Game>>("api/games");
+        Games = responseHttp.Response!;
+    }
+
+    private async Task Delete(Game game)
+    {
+        var result = await swal.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estas seguro?",
+            Text = "No podras revertir este cambio.",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Si, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+
+        var confirmation = string.IsNullOrEmpty(result.Value);
+
+        if (confirmation)
+        {
+            return;
+        }
+
+        var responseHttp = await repository.DeleteAsync($"api/games/{game.Id}");
+
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var errorMessage = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            await Load();
+        }
+    }
+}

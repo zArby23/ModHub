@@ -1,0 +1,45 @@
+﻿@page "/games/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+@using ModHub.Shared.DTOs
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Añadir Juego</h1>
+
+<GamesForm @ref="gamesForm" Game="game" OnValidSubmit="Create" ReturnAction="Return" />
+
+@code {
+    private Game game = new Game();
+    private GamesForm gamesForm;
+
+    private async Task Create()
+    {
+        var dto = new GameWithCategoriesDto
+        {
+            Game = game,
+            CategoryIds = gamesForm?.SelectedCategoryIds ?? new List<int>()
+        };
+
+        var responseHttp = await repository.PostAsync("/api/games/with-categories", dto);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            gamesForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/games");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/games");
+    }
+}

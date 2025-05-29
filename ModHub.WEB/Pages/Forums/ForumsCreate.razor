@@ -1,0 +1,40 @@
+﻿@page "/forums/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Agregar Forum</h1>
+
+<ForumsForm @ref="forumForm" Forum="forum" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private Forum forum = new();
+    private ForumsForm forumForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/forums", forum);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            forumForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/forums");
+        }
+        navigationManager.NavigateTo("/forums");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/forums");
+    }
+}
+creator

@@ -37,14 +37,14 @@ namespace ModHub.Shared.Entities
         public float Version { get; set; }
 
         [Display(Name = "FechaPublicacion Mod")]
-        [DataType(DataType.Date)]
-        public DateTime PublicationDate = DateTime.Now;
-
-        [Display(Name = "FechaActualizacion Mod")]
-        [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
-        public DateTime UpdateDate { get; set; }
+        public DateTime PublicationDate { get; set; } = DateTime.Now;
+
+        [Display(Name = "FechaActualizacion Mod")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Estado Mod")]
         public ModStatus ModStatus { get; set; }

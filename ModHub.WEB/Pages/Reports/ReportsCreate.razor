@@ -1,0 +1,39 @@
+﻿@page "/reports/create"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Agregar Reporte</h1>
+
+<ReportsForm @ref="reportForm" Report="report" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private Report report = new();
+    private ReportsForm reportForm;
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/reports", report);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            reportForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/reports");
+        }
+        navigationManager.NavigateTo("/reports");
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/reports");
+    }
+}

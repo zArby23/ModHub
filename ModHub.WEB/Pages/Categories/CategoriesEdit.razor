@@ -1,0 +1,70 @@
+﻿@page "/categories/edit/{Id:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using ModHub.Shared.Entities
+
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService swal
+
+<h1>Actualizar datos</h1>
+
+@if(category is null)
+{
+    <div class="spinner"/>
+    <p>Cargando...</p>
+}
+else
+{
+    <CategoriesForm @ref="categoryForm" Category="category" OnValidSubmit="Edit" ReturnAction="Return"/>
+}
+
+@code {
+    private Category category;
+    private CategoriesForm categoryForm;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var responseHttp = await repository.GetAsync<Category>($"/api/categories/{Id}");
+        if (responseHttp.Error)
+        {
+            if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/categories");
+                return;
+            }
+            else
+            {
+                var message = await responseHttp.GetErrorMessage();
+                await swal.FireAsync("Error", message, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+            category = responseHttp.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+        var responseHttp = await repository.PutAsync($"/api/categories", category);
+        if (responseHttp.Error)
+        {
+            var errorMessage = await responseHttp.GetErrorMessage();
+            await swal.FireAsync("Error", errorMessage, SweetAlertIcon.Error);
+        }
+        else
+        {
+            categoryForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/categories");
+        }
+    }
+
+    private void Return()
+    {
+        navigationManager.NavigateTo("/categories");
+    }
+}

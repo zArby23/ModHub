@@ -1,6 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">ModHub.WEB</a>
+        <a class="navbar-brand" href=""><b>ModHub</b></a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,19 +10,65 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
+        @* Inicio *@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
             </NavLink>
         </div>
+
+        @* Creadores *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="Creators">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Creadores
             </NavLink>
         </div>
+
+        @* Juegos *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            <NavLink class="nav-link" href="Games">
+                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Juegos
+            </NavLink>
+        </div>
+        @* Mods *@
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Mods">
+                <span class="bi bi-wrench-adjustable-circle-fill-nav-menu" aria-hidden="true"></span> Mods
+            </NavLink>
+        </div>
+        @*mostrar categorias solo a admins*@
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Categories">
+                <span class="bi bi-filter-square-fill-nav-menu" aria-hidden="true"></span> Categorias
+            </NavLink>
+        </div>
+        </Authorized>
+    </AuthorizeView>
+
+        @* Foros *@
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Forums">
+                <span class="bi bi-chat-left-text-fill-nav-menu" aria-hidden="true"></span> Foros
+            </NavLink>
+        </div>
+
+        @*mostrar categorias de juegos solo a admins*@
+        <AuthorizeView Roles="Admin">
+        <Authorized>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="GamesCategories">
+                <span class="bi bi-bookmark-fill-nav-menu" aria-hidden="true"></span> Categorias de juegos
+            </NavLink>
+        </div>
+            </Authorized>
+        </AuthorizeView>
+
+        @* Reportes *@
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Reports">
+                <span class="bi bi-dpad-fill-nav-menu" aria-hidden="true"></span> Reportes
             </NavLink>
         </div>
     </nav>

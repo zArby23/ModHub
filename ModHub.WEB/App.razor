@@ -1,12 +1,33 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        
+       @*  Auth *@
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <p>Autorizando el ingreso a la pagina...</p>
+                <div class="aling-items-center"> 
+                    <img src="./images/cargando.gif" />
+                </div>
+            </Authorizing>
+            <NotAuthorized>
+                <p>No estas autorizado para ver este contenido...</p>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
+
+        @* Auth *@
+        <CascadingAuthenticationState>
+            <PageTitle>No encontrado</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Lo sentimos no hay nada en esta ruta.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+
+        
+
     </NotFound>
 </Router>
