@@ -14,6 +14,7 @@ namespace ModHub.WEB.Auth
                 new Claim("LastName", "Ramirez"),
                 new Claim(ClaimTypes.Name, "159sebastian.ramirez@gmail.com"),
                 new Claim(ClaimTypes.Role, "Admin")
+
             },
             authenticationType: "test");
 

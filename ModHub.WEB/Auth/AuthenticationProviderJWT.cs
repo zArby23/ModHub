@@ -6,7 +6,7 @@ using System.Security.Claims;
 using ModHub.WEB.Auth;
 using ModHub.WEB.Helpers;
 
-namespace Veterinary.WEB.Auth
+namespace ModHub.WEB.Auth
 {
     public class AuthenticationProviderJWT : AuthenticationStateProvider, ILoginService
     {
@@ -65,4 +65,4 @@ namespace Veterinary.WEB.Auth
     }
 }
 
-}
+
