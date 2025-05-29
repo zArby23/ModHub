@@ -27,34 +27,34 @@ else
                         <a class="btn btn-sm btn-primary float-end" href="/reports/create"><i class="bi bi-person-fill-add"></i> Añadir Reporte</a>
                     </span>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                    <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Creador que reporta</th>
-                            <th>Titulo</th>
-                            <th>Contenido</th>
-                            <th>Mod</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var report in Reports)
-                        {
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@GetCreatorName(report.CreatorId)</td>
-                                <td>@report.Title</td>
-                                <td>@report.Content</td>
-                                <td>@GetModName(report.ModId)</td>
-                                <td>
-                                    <a href="/reports/edit/@report.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
-                                    <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(report))><i class="bi bi-trash-fill" /> Borrar</button>
-                                </td>
+                                <th>Creador que reporta</th>
+                                <th>Titulo</th>
+                                <th>Contenido</th>
+                                <th>Mod</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in Reports)
+                            {
+                                <tr>
+                                    <td>@GetCreatorName(report.CreatorId)</td>
+                                    <td>@report.Title</td>
+                                    <td>@report.Content</td>
+                                    <td>@GetModName(report.ModId)</td>
+                                    <td>
+                                        <a href="/reports/edit/@report.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(report))><i class="bi bi-trash-fill" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
             </div>
         </Body>

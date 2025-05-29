@@ -26,32 +26,32 @@ else
                         <a class="btn btn-sm btn-primary float-end" href="/creators/create"><i class="bi bi-person-fill-add"></i> Añadir Creador</a>
                     </span>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                    <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Correo Electrónico</th>
-                            <th>Fecha de Registro</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var creator in Creators)
-                        {
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@creator.FullName</td>
-                                <td>@creator.Email</td>
-                                <td>@creator.DateRegistration.ToString("d")</td>
-                                <td>
-                                    <a href="/creators/edit/@creator.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
-                                    <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(creator))><i class="bi bi-trash-fill" /> Borrar</button>
-                                </td>
+                                <th>Nombre</th>
+                                <th>Correo Electrónico</th>
+                                <th>Fecha de Registro</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var creator in Creators)
+                            {
+                                <tr>
+                                    <td>@creator.FullName</td>
+                                    <td>@creator.Email</td>
+                                    <td>@creator.DateRegistration.ToString("d")</td>
+                                    <td>
+                                        <a href="/creators/edit/@creator.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(creator))><i class="bi bi-trash-fill" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
             </div>
         </Body>

@@ -30,30 +30,30 @@ else
                         <a class="btn btn-sm btn-primary float-end" href="/categories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria</a>
                     </span>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                    <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripcion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var category in Categories)
-                        {
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@category.Name</td>
-                                <td>@category.Description</td>
-                                <td>
-                                    <a href="/categories/edit/@category.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
-                                    <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(category))><i class="bi bi-trash-fill" /> Borrar</button>
-                                </td>
+                                <th>Nombre</th>
+                                <th>Descripcion</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Categories)
+                            {
+                                <tr>
+                                    <td>@category.Name</td>
+                                    <td>@category.Description</td>
+                                    <td>
+                                        <a href="/categories/edit/@category.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(category))><i class="bi bi-trash-fill" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
             </div>
         </Body>

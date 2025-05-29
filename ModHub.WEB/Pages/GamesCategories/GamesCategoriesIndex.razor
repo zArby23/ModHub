@@ -30,30 +30,30 @@ else
                         <a class="btn btn-sm btn-primary float-end" href="/gamescategories/create"><i class="bi bi-person-fill-add"></i> Añadir Categoria De Juego</a>
                     </span>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre Del Juego</th>
-                                <th>Tipo De Categoria</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var gameCategory in GamesCategories)
-                            {
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>@GetGameFullName(gameCategory.GameId)</td>
-                                    <td>@GetCategoryName(gameCategory.CategoryId)</td>
-                                    <td>
-                                        <a href="/gameCategories/edit/@gameCategory.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
-                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(gameCategory))><i class="bi bi-trash-fill" /> Borrar</button>
-                                    </td>
+                                    <th>Nombre Del Juego</th>
+                                    <th>Tipo De Categoria</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var gameCategory in GamesCategories)
+                                {
+                                    <tr>
+                                        <td>@GetGameFullName(gameCategory.GameId)</td>
+                                        <td>@GetCategoryName(gameCategory.CategoryId)</td>
+                                        <td>
+                                            <a href="/gameCategories/edit/@gameCategory.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                            <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(gameCategory))><i class="bi bi-trash-fill" /> Borrar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </Body>

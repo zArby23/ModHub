@@ -27,39 +27,39 @@ else
                     <a class="btn btn-sm btn-primary float-end" href="/games/create"><i class="bi bi-controller"></i> Añadir Juego</a>
                     </span>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Juego</th>
-                                <th>Descripción</th>
-                                <th>Categorias</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var game in Games)
-                            {
+                <div class="card-body">
+                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>@game.FullName</td>
-                                    <td>@game.Description</td>
-                                    <td>
-                                        <ul>
-                                            @foreach (var category in GetCategoriesForGame(game.Id))
-                                            {
-                                                <span class="badge bg-primary me-1">@category.Name</span>
-                                            }
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <a href="/games/edit/@game.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
-                                        <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(game))><i class="bi bi-trash-fill" /> Borrar</button>
-                                    </td>
+                                    <th>Nombre del Juego</th>
+                                    <th>Descripción</th>
+                                    <th>Categorias</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var game in Games)
+                                {
+                                    <tr>
+                                        <td>@game.FullName</td>
+                                        <td>@game.Description</td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var category in GetCategoriesForGame(game.Id))
+                                                {
+                                                    <span class="badge bg-primary me-1">@category.Name</span>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <a href="/games/edit/@game.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill" /> Editar</a>
+                                            <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(game))><i class="bi bi-trash-fill" /> Borrar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </Body>
