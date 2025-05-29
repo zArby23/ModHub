@@ -20,6 +20,7 @@ namespace ModHub.API.Controllers
             _Context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -27,6 +28,7 @@ namespace ModHub.API.Controllers
             return Ok(report);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
