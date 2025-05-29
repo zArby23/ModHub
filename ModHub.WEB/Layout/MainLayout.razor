@@ -6,7 +6,17 @@
 
     <main>
         <div class="top-row px-4">
-            <a style="text-decoration: none; color: aliceblue" href="https://github.com/zArby23/ModHub" target="_blank">
+            <a style="text-decoration: none; color: aliceblue;" href="">
+                <AuthorizeView Roles="Admin">
+                    <Authorized>
+                        <b>Autorizado: @context.User.Identity?.Name</b>
+                    </Authorized>
+                    <NotAuthorized>
+                        <b>No estas autorizado</b>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </a>
+            <a style="text-decoration: none; color: aliceblue; cursor:pointer" href="https://github.com/zArby23/ModHub" target="_blank">
                 <i class="bi bi-github"></i>
                 <b>GitHub Repository</b>
             </a>
