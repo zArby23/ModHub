@@ -7,13 +7,12 @@
             <Authorizing>
                 <p>Autorizando el ingreso a la pagina...</p>
                 <div class="aling-items-center"> 
-                    <img src="~/images/cargando.gif" />
+                    <img src="./images/cargando.gif" />
                 </div>
-                <NotAuthorized>
-                    <p>No estas autorizado para ver este contenido...</p>
-                </NotAuthorized>
-
             </Authorizing>
+            <NotAuthorized>
+                <p>No estas autorizado para ver este contenido...</p>
+            </NotAuthorized>
         </AuthorizeRouteView>
 
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
